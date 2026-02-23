@@ -1070,6 +1070,15 @@ html, body {
   background: var(--iron);
 }
 
+.panel-vitals .metric-label {
+  color: #22cc66;
+}
+
+.panel-vitals .metric-label-dot {
+  background: #22cc66;
+  box-shadow: 0 0 5px #22cc66;
+}
+
 .metric-value {
   font-family: var(--font-mono);
   font-size: 13px;
