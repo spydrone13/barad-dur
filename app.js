@@ -271,18 +271,25 @@ const REGIONS = [
   { name: 'Lothlórien', pct: 6  },
 ];
 
+function coverageColor(pct) {
+  if (pct > 80)  return { text: '#22cc66', bar: 'linear-gradient(90deg, #0e7a3a, #22cc66)', glow: '0 0 6px #22cc6688' };
+  if (pct >= 50) return { text: '#99ddff', bar: 'linear-gradient(90deg, #2266aa, #99ddff)', glow: '0 0 6px #99ddff66' };
+  return           { text: '#ff3333', bar: 'linear-gradient(90deg, #880000, #ff3333)', glow: '0 0 6px #ff333366' };
+}
+
 function initRegionBars() {
   const wrap = document.getElementById('regionBars');
   if (!wrap) return;
   REGIONS.forEach(r => {
+    const c   = coverageColor(r.pct);
     const row = document.createElement('div');
     row.className = 'metric-bar-row';
     row.innerHTML = `
-      <span class="metric-bar-label">${r.name}</span>
+      <span class="metric-bar-label" style="color:${c.text}">${r.name}</span>
       <div class="metric-bar-wrap">
-        <div class="metric-bar-fill" style="width:${r.pct}%;"></div>
+        <div class="metric-bar-fill" style="width:${r.pct}%; background:${c.bar}; box-shadow:${c.glow};"></div>
       </div>
-      <span class="metric-bar-num">${r.pct}%</span>`;
+      <span class="metric-bar-num"  style="color:${c.text}">${r.pct}%</span>`;
     wrap.appendChild(row);
   });
 }

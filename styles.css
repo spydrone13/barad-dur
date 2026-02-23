@@ -1150,6 +1150,18 @@ html, body {
   color: var(--text);
 }
 
+.alert-strip.success {
+  background: rgba(34,204,102,0.07);
+  border-left-color: #22cc66;
+  color: #22cc66;
+}
+
+.alert-strip.info {
+  background: rgba(153,221,255,0.07);
+  border-left-color: #99ddff;
+  color: #99ddff;
+}
+
 .alert-strip-icon { font-size: 13px; }
 .alert-strip-msg  { flex: 1; }
 
