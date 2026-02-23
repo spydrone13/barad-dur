@@ -1,125 +1,130 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
   <defs>
-    <!-- Outer halo glow -->
-    <radialGradient id="haloGrad" cx="50%" cy="50%" r="50%">
-      <stop offset="0%"   stop-color="#ff8800" stop-opacity="0.5"/>
-      <stop offset="45%"  stop-color="#cc2200" stop-opacity="0.25"/>
+    <!-- Halo background -->
+    <radialGradient id="halo" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#ff8800" stop-opacity="0.45"/>
+      <stop offset="40%"  stop-color="#cc3300" stop-opacity="0.2"/>
       <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
     </radialGradient>
-    <!-- Iris gradient — orange/yellow to deep red -->
-    <radialGradient id="irisGrad" cx="50%" cy="50%" r="50%">
-      <stop offset="0%"   stop-color="#ffcc00"/>
-      <stop offset="25%"  stop-color="#ff8800"/>
-      <stop offset="60%"  stop-color="#dd2200"/>
-      <stop offset="100%" stop-color="#880000"/>
+
+    <!-- Iris: bright yellow center → deep red edge -->
+    <radialGradient id="iris" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#ffee00"/>
+      <stop offset="20%"  stop-color="#ffaa00"/>
+      <stop offset="55%"  stop-color="#ee3300"/>
+      <stop offset="100%" stop-color="#770000"/>
     </radialGradient>
+
     <!-- Pupil -->
-    <linearGradient id="pupilGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+    <linearGradient id="pupil" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0%"   stop-color="#000000"/>
-      <stop offset="50%"  stop-color="#0d0000"/>
+      <stop offset="50%"  stop-color="#0a0000"/>
       <stop offset="100%" stop-color="#000000"/>
     </linearGradient>
-    <!-- Flame spike gradient -->
-    <linearGradient id="flameA" x1="0%" y1="100%" x2="0%" y2="0%">
-      <stop offset="0%"   stop-color="#cc2200"/>
-      <stop offset="50%"  stop-color="#ff6600"/>
-      <stop offset="100%" stop-color="#ffdd00"/>
+
+    <!-- Flame spike gradient: red base → yellow tip (userSpaceOnUse so it applies to the whole canvas) -->
+    <linearGradient id="flameA" x1="100" y1="110" x2="100" y2="5" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#bb1100"/>
+      <stop offset="50%"  stop-color="#ff5500"/>
+      <stop offset="100%" stop-color="#ffee00"/>
     </linearGradient>
-    <linearGradient id="flameB" x1="0%" y1="100%" x2="0%" y2="0%">
-      <stop offset="0%"   stop-color="#aa1100"/>
-      <stop offset="60%"  stop-color="#ff4400"/>
-      <stop offset="100%" stop-color="#ffaa00"/>
+    <linearGradient id="flameB" x1="100" y1="110" x2="100" y2="5" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#991100"/>
+      <stop offset="55%"  stop-color="#ff4400"/>
+      <stop offset="100%" stop-color="#ffcc00"/>
     </linearGradient>
-    <!-- Glow filters -->
-    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
-      <feGaussianBlur stdDeviation="2.5" result="blur"/>
-      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
-    <filter id="glowStrong" x="-60%" y="-60%" width="220%" height="220%">
-      <feGaussianBlur stdDeviation="5" result="blur"/>
-      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
-    <filter id="glowEye" x="-30%" y="-30%" width="160%" height="160%">
-      <feGaussianBlur stdDeviation="3" result="blur"/>
-      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
-    <!-- Clip to eye shape -->
+
+    <!-- Clip the iris/pupil to the eye almond shape -->
     <clipPath id="eyeClip">
-      <ellipse cx="100" cy="100" rx="62" ry="32"/>
+      <path d="M 34 100 Q 67 54 100 52 Q 133 54 166 100 Q 133 146 100 148 Q 67 146 34 100 Z"/>
     </clipPath>
   </defs>
 
-  <!-- Background halo -->
-  <circle cx="100" cy="100" r="90" fill="url(#haloGrad)"/>
+  <!-- Ambient halo glow (no filter needed) -->
+  <circle cx="100" cy="100" r="88" fill="url(#halo)"/>
 
-  <!-- ── FLAME CROWN SPIKES ───────────────────────────────── -->
-  <!-- Radiating flame spikes around the eye, like the image   -->
+  <!-- ── FLAME CROWN SPIKES ─────────────────────────────── -->
+  <!-- Layered: outer glow copy (translucent wide) + solid inner spike -->
 
-  <!-- Large top spike -->
-  <polygon points="100,8  93,52  107,52"  fill="url(#flameA)" filter="url(#glow)" opacity="0.95"/>
-  <!-- Top-left large -->
-  <polygon points="62,18  74,56  86,50"   fill="url(#flameA)" filter="url(#glow)" opacity="0.9"/>
-  <!-- Top-right large -->
-  <polygon points="138,18 126,56 114,50"  fill="url(#flameA)" filter="url(#glow)" opacity="0.9"/>
-  <!-- Far left -->
-  <polygon points="30,42  64,72  66,60"   fill="url(#flameB)" filter="url(#glow)" opacity="0.85"/>
-  <!-- Far right -->
-  <polygon points="170,42 136,72 134,60"  fill="url(#flameB)" filter="url(#glow)" opacity="0.85"/>
-  <!-- Left lower -->
-  <polygon points="22,80  62,88  60,76"   fill="url(#flameB)" filter="url(#glow)" opacity="0.75"/>
-  <!-- Right lower -->
-  <polygon points="178,80 138,88 140,76"  fill="url(#flameB)" filter="url(#glow)" opacity="0.75"/>
-  <!-- Left upper-mid -->
-  <polygon points="44,26  68,60  78,54"   fill="url(#flameB)" filter="url(#glow)" opacity="0.8"/>
-  <!-- Right upper-mid -->
-  <polygon points="156,26 132,60 122,54"  fill="url(#flameB)" filter="url(#glow)" opacity="0.8"/>
+  <!-- Top spike — glow layer -->
+  <polygon points="100,6  90,55  110,55"   fill="#ff6600" opacity="0.22"/>
+  <!-- Top spike — solid -->
+  <polygon points="100,6  95,54  105,54"   fill="url(#flameA)"/>
 
-  <!-- Bottom spikes (smaller, echoing downward) -->
-  <polygon points="100,192 94,154 106,154" fill="url(#flameB)" opacity="0.4" filter="url(#glow)"/>
-  <polygon points="70,182  78,150  88,156" fill="url(#flameB)" opacity="0.3" filter="url(#glow)"/>
-  <polygon points="130,182 122,150 112,156"fill="url(#flameB)" opacity="0.3" filter="url(#glow)"/>
+  <!-- Upper-left spike — glow -->
+  <polygon points="58,15  72,58  88,52"    fill="#ff5500" opacity="0.2"/>
+  <!-- Upper-left spike — solid -->
+  <polygon points="61,16  74,57  85,52"    fill="url(#flameB)"/>
 
-  <!-- ── EYE SOCKET / LID SHADOW ──────────────────────────── -->
-  <ellipse cx="100" cy="100" rx="70" ry="40" fill="#1a0000" opacity="0.9"/>
+  <!-- Upper-right spike — glow -->
+  <polygon points="142,15 128,58 112,52"   fill="#ff5500" opacity="0.2"/>
+  <!-- Upper-right spike — solid -->
+  <polygon points="139,16 126,57 115,52"   fill="url(#flameB)"/>
+
+  <!-- Left spike — glow -->
+  <polygon points="26,40  63,72  66,58"    fill="#ff4400" opacity="0.18"/>
+  <!-- Left spike — solid -->
+  <polygon points="29,41  64,71  66,60"    fill="url(#flameB)"/>
+
+  <!-- Right spike — glow -->
+  <polygon points="174,40 137,72 134,58"   fill="#ff4400" opacity="0.18"/>
+  <!-- Right spike — solid -->
+  <polygon points="171,41 136,71 134,60"   fill="url(#flameB)"/>
+
+  <!-- Lower-left spike — glow -->
+  <polygon points="20,78  61,90  62,76"    fill="#dd3300" opacity="0.15"/>
+  <!-- Lower-left spike — solid -->
+  <polygon points="22,79  61,89  62,78"    fill="url(#flameB)" opacity="0.85"/>
+
+  <!-- Lower-right spike — glow -->
+  <polygon points="180,78 139,90 138,76"   fill="#dd3300" opacity="0.15"/>
+  <!-- Lower-right spike — solid -->
+  <polygon points="178,79 139,89 138,78"   fill="url(#flameB)" opacity="0.85"/>
+
+  <!-- Mid-left spike -->
+  <polygon points="40,24  67,61  79,55"    fill="url(#flameB)" opacity="0.8"/>
+  <!-- Mid-right spike -->
+  <polygon points="160,24 133,61 121,55"   fill="url(#flameB)" opacity="0.8"/>
+
+  <!-- ── EYE SOCKET (dark almond background) ───────────────── -->
+  <path d="M 34 100 Q 67 54 100 52 Q 133 54 166 100 Q 133 146 100 148 Q 67 146 34 100 Z"
+        fill="#1a0000"/>
 
   <!-- ── IRIS ──────────────────────────────────────────────── -->
-  <ellipse cx="100" cy="100" rx="64" ry="34" fill="url(#irisGrad)" clip-path="url(#eyeClip)" filter="url(#glowEye)"/>
+  <ellipse cx="100" cy="100" rx="63" ry="33" fill="url(#iris)" clip-path="url(#eyeClip)"/>
 
-  <!-- Iris depth rings -->
-  <ellipse cx="100" cy="100" rx="64" ry="34" fill="none" stroke="#ff8800" stroke-width="1.2" opacity="0.5" clip-path="url(#eyeClip)"/>
-  <ellipse cx="100" cy="100" rx="50" ry="26" fill="none" stroke="#ff6600" stroke-width="0.8" opacity="0.4" clip-path="url(#eyeClip)"/>
+  <!-- Iris concentric rings (depth) -->
+  <ellipse cx="100" cy="100" rx="63" ry="33" fill="none" stroke="#ff9900" stroke-width="1.5" opacity="0.4" clip-path="url(#eyeClip)"/>
+  <ellipse cx="100" cy="100" rx="48" ry="24" fill="none" stroke="#ff6600" stroke-width="1"   opacity="0.3" clip-path="url(#eyeClip)"/>
 
-  <!-- Iris texture — radial striations -->
-  <g clip-path="url(#eyeClip)" stroke="#ffaa00" stroke-width="0.6" opacity="0.25">
-    <line x1="100" y1="66" x2="100" y2="134"/>
-    <line x1="76"  y1="68" x2="124" y2="132"/>
-    <line x1="124" y1="68" x2="76"  y2="132"/>
-    <line x1="60"  y1="80" x2="140" y2="120"/>
-    <line x1="140" y1="80" x2="60"  y2="120"/>
-    <line x1="42"  y1="96" x2="158" y2="104"/>
-    <line x1="158" y1="96" x2="42"  y2="104"/>
-  </g>
+  <!-- ── UPPER EYELID ───────────────────────────────────────── -->
+  <!-- Shadow thickness -->
+  <path d="M 34 100 Q 67 54 100 52 Q 133 54 166 100"
+        fill="none" stroke="#cc4400" stroke-width="4" stroke-linecap="round" opacity="0.4"/>
+  <!-- Bright edge -->
+  <path d="M 34 100 Q 67 54 100 52 Q 133 54 166 100"
+        fill="none" stroke="#ff7700" stroke-width="2" stroke-linecap="round"/>
 
-  <!-- ── LID CURVES ─────────────────────────────────────────── -->
-  <!-- Upper lid -->
-  <path d="M 36 100 Q 68 56 100 54 Q 132 56 164 100"
-        fill="none" stroke="#ff6600" stroke-width="2.5" stroke-linecap="round" filter="url(#glow)"/>
-  <!-- Lower lid -->
-  <path d="M 36 100 Q 68 144 100 146 Q 132 144 164 100"
-        fill="none" stroke="#cc3300" stroke-width="2" stroke-linecap="round" filter="url(#glow)"/>
+  <!-- ── LOWER EYELID ───────────────────────────────────────── -->
+  <path d="M 34 100 Q 67 146 100 148 Q 133 146 166 100"
+        fill="none" stroke="#aa2200" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
 
-  <!-- Eye corner catches -->
-  <circle cx="38"  cy="100" r="4" fill="#ff8800" opacity="0.6" filter="url(#glow)"/>
-  <circle cx="162" cy="100" r="4" fill="#ff8800" opacity="0.6" filter="url(#glow)"/>
+  <!-- Eye corners (canthus glow blobs) -->
+  <ellipse cx="37"  cy="100" rx="5" ry="3" fill="#ff8800" opacity="0.55"/>
+  <ellipse cx="163" cy="100" rx="5" ry="3" fill="#ff8800" opacity="0.55"/>
 
   <!-- ── VERTICAL SLIT PUPIL ────────────────────────────────── -->
-  <ellipse cx="100" cy="100" rx="9" ry="32" fill="url(#pupilGrad)" filter="url(#glowStrong)"/>
-  <!-- Pupil rim glow -->
-  <ellipse cx="100" cy="100" rx="9" ry="32" fill="none" stroke="#ff3300" stroke-width="1.5" opacity="0.8" filter="url(#glow)"/>
-  <!-- Catchlight -->
-  <ellipse cx="97"  cy="90"  rx="2.5" ry="6" fill="#ff6600" opacity="0.35"/>
+  <!-- Soft outer penumbra -->
+  <ellipse cx="100" cy="100" rx="13" ry="34" fill="#000000" opacity="0.45" clip-path="url(#eyeClip)"/>
+  <!-- Hard pupil -->
+  <ellipse cx="100" cy="100" rx="8"  ry="31" fill="url(#pupil)" clip-path="url(#eyeClip)"/>
+  <!-- Pupil edge highlight (fire rim) -->
+  <ellipse cx="100" cy="100" rx="8"  ry="31" fill="none" stroke="#ff4400" stroke-width="1.2" opacity="0.65" clip-path="url(#eyeClip)"/>
 
-  <!-- ── OUTER LID RIM ──────────────────────────────────────── -->
-  <path d="M 36 100 Q 68 56 100 54 Q 132 56 164 100 Q 132 144 100 146 Q 68 144 36 100 Z"
-        fill="none" stroke="#ff4400" stroke-width="1" opacity="0.5" filter="url(#glow)"/>
+  <!-- Catchlight flare -->
+  <ellipse cx="97" cy="88" rx="2" ry="5" fill="#ffcc00" opacity="0.4"/>
+
+  <!-- Outer eye outline (full almond) -->
+  <path d="M 34 100 Q 67 54 100 52 Q 133 54 166 100 Q 133 146 100 148 Q 67 146 34 100 Z"
+        fill="none" stroke="#ff5500" stroke-width="1.2" opacity="0.5"/>
 </svg>
