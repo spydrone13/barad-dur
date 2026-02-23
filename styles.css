@@ -140,8 +140,8 @@ html, body {
 }
 
 @keyframes eyePulse {
-  0%, 100% { filter: drop-shadow(0 0 6px rgba(255,100,0,0.6)); }
-  50%       { filter: drop-shadow(0 0 14px rgba(255,150,0,0.95)) drop-shadow(0 0 28px rgba(255,60,0,0.4)); }
+  0%, 100% { filter: drop-shadow(0 0 6px rgba(255,153,0,0.8)) drop-shadow(0 0 14px rgba(255,100,0,0.4)); }
+  50%       { filter: drop-shadow(0 0 12px rgba(255,180,0,1))  drop-shadow(0 0 28px rgba(255,120,0,0.65)) drop-shadow(0 0 48px rgba(200,80,0,0.3)); }
 }
 
 .header-title {
@@ -769,9 +769,9 @@ html, body {
 
 .eye-glow-bg {
   position: absolute;
-  inset: -22px;
+  inset: -28px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,120,0,0.2) 0%, rgba(200,60,0,0.1) 40%, transparent 70%);
+  background: radial-gradient(circle, rgba(255,140,0,0.22) 0%, rgba(220,70,0,0.12) 45%, transparent 70%);
   animation: eyePulse 3.5s ease-in-out infinite;
 }
 
