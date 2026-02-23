@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Barad-dûr — Analytics Platform</title>
+  <link rel="stylesheet" href="styles.css"/>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- ══════════════════════════════════
+       HEADER
+       ══════════════════════════════════ -->
+  <header class="header">
+    <a class="header-brand" href="#">
+      <img src="eye-logo.svg" class="header-logo" alt="Eye of Sauron"/>
+      <div class="header-title">
+        <span class="brand-name">Barad-dûr</span>
+        <span class="brand-tagline">Omniscient Analytics Platform</span>
+      </div>
+    </a>
+
+    <div class="header-center">
+      <div class="status-indicator">
+        <span class="status-dot"></span>
+        The Eye is watching
+      </div>
+      <div class="chip">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+          <circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1"/>
+          <line x1="5" y1="1" x2="5" y2="5" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
+          <line x1="5" y1="5" x2="7.5" y2="7.5" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
+        </svg>
+        Third Age, 3019
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <!-- Notifications -->
+      <button class="icon-btn" data-tooltip="9 Alerts" onclick="showSection('alerts')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          <circle cx="18" cy="6" r="4" fill="var(--red-fire)" stroke="none"/>
+          <text x="18" y="9" text-anchor="middle" font-size="6" fill="white" font-family="monospace">9</text>
+        </svg>
+      </button>
+      <!-- Settings -->
+      <button class="icon-btn" data-tooltip="Dark Tower Settings">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+      </button>
+      <div class="avatar" data-tooltip="Sauron, Dark Lord">S</div>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════
+       SIDEBAR
+       ══════════════════════════════════ -->
+  <aside class="sidebar">
+
+    <nav>
+      <div class="nav-section">
+        <div class="nav-label">Surveillance</div>
+
+        <a class="nav-item active" href="#" onclick="showSection('eye'); return false;">
+          <!-- Eye icon -->
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+          The Eye
+          <span class="nav-badge">LIVE</span>
+        </a>
+
+        <a class="nav-item" href="#" onclick="showSection('streams'); return false;">
+          <!-- Activity icon -->
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+          Dark Fire
+          <span class="nav-badge">247</span>
+        </a>
+
+        <a class="nav-item" href="#" onclick="showSection('sources'); return false;">
+          <!-- Database icon -->
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+          </svg>
+          Mordor Gates
+          <span class="nav-badge">9</span>
+        </a>
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-label">Analysis</div>
+
+        <a class="nav-item" href="#" onclick="showSection('query'); return false;">
+          <!-- Terminal icon -->
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/>
+          </svg>
+          Black Speech
+        </a>
+
+        <a class="nav-item" href="#" onclick="showSection('reports'); return false;">
+          <!-- FileText icon -->
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+          </svg>
+          Nine Rings
+        </a>
+
+        <a class="nav-item" href="#" onclick="showSection('map'); return false;">
+          <!-- Map icon -->
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/>
+          </svg>
+          Shadow Map
+        </a>
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-label">Control</div>
+
+        <a class="nav-item" href="#" onclick="showSection('agents'); return false;">
+          <!-- Users icon -->
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+          Nazgûl Agents
+        </a>
+
+        <a class="nav-item" href="#" onclick="showSection('alerts'); return false;">
+          <!-- Alert icon -->
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          Fell Warnings
+          <span class="nav-badge">3</span>
+        </a>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="ring-counter">
+        <div class="ring-counter-label">Rings of Power Bound</div>
+        <div class="ring-dots" id="ringDots"></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ══════════════════════════════════
+       MAIN CONTENT
+       ══════════════════════════════════ -->
+  <main class="main">
+
+    <!-- ─────────────────────────────────
+         THE EYE — primary dashboard
+         ─────────────────────────────────  -->
+    <section id="section-eye">
+
+      <!-- Page header -->
+      <div class="page-header">
+        <div class="page-title-wrap">
+          <div class="page-eyebrow">Omniscient Surveillance Module</div>
+          <h1 class="page-title">The <span>Eye</span></h1>
+          <p class="page-subtitle">One dashboard to rule them all — real-time visibility across all data streams</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-ghost">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export
+          </button>
+          <button class="btn btn-primary">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            Focus Gaze
+          </button>
+        </div>
+      </div>
+
+      <!-- KPI Row -->
+      <div class="kpi-grid">
+        <div class="kpi-card featured">
+          <div class="kpi-label">Souls Surveilled</div>
+          <div class="kpi-value fire" id="kpi-souls">3,847,221</div>
+          <div class="kpi-delta up">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+            +12.4% since last watch
+          </div>
+          <svg class="kpi-spark" id="spark-0" viewBox="0 0 60 32"/>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Dark Events / sec</div>
+          <div class="kpi-value" id="kpi-events">148,392</div>
+          <div class="kpi-delta up">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+            +7.1%
+          </div>
+          <svg class="kpi-spark" id="spark-1" viewBox="0 0 60 32"/>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Palantíri Online</div>
+          <div class="kpi-value" id="kpi-palantiri">7 / 7</div>
+          <div class="kpi-delta flat">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            All connected
+          </div>
+          <svg class="kpi-spark" id="spark-2" viewBox="0 0 60 32"/>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Shadow Coverage</div>
+          <div class="kpi-value" id="kpi-coverage">94.7%</div>
+          <div class="kpi-delta down">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            −1.3% (Lothlórien blind-spot)
+          </div>
+          <svg class="kpi-spark" id="spark-3" viewBox="0 0 60 32"/>
+        </div>
+      </div>
+
+      <!-- Main content grid -->
+      <div class="content-grid">
+
+        <!-- Eye panel — left -->
+        <div style="display:flex; flex-direction:column; gap:20px;">
+
+          <!-- The Eye visual -->
+          <div class="panel eye-panel">
+            <div class="panel-header">
+              <div class="panel-title">
+                <!-- Eye icon -->
+                <svg class="panel-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                The Eye of Sauron
+              </div>
+              <div class="panel-controls">
+                <span class="badge badge-active"><span class="badge-dot"></span>Scanning</span>
+                <button class="btn btn-ghost" style="padding:5px 10px; font-size:10px;">Configure</button>
+              </div>
+            </div>
+
+            <div class="eye-visual-wrap">
+              <div class="eye-rings">
+                <div class="eye-ring eye-ring-1"></div>
+                <div class="eye-ring eye-ring-2"></div>
+                <div class="eye-ring eye-ring-3"></div>
+                <div class="eye-ring eye-ring-4"></div>
+                <!-- Tick marks -->
+                <div id="eyeTicks"></div>
+                <div class="eye-center">
+                  <div class="eye-glow-bg"></div>
+                  <img src="eye-logo.svg" class="eye-svg-main" alt="Eye of Sauron"/>
+                </div>
+              </div>
+            </div>
+
+            <div class="eye-stats-row">
+              <div class="eye-stat">
+                <span class="eye-stat-value" id="eye-lat">2.4ms</span>
+                <span class="eye-stat-label">Gaze Latency</span>
+              </div>
+              <div class="eye-stat">
+                <span class="eye-stat-value" id="eye-thr">99.97%</span>
+                <span class="eye-stat-label">Uptime</span>
+              </div>
+              <div class="eye-stat">
+                <span class="eye-stat-value" id="eye-span">68TB</span>
+                <span class="eye-stat-label">Watched Today</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Activity chart -->
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">
+                <svg class="panel-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                Dark Fire Activity — 24h
+              </div>
+              <div class="panel-controls">
+                <div class="tab-bar" style="padding:0; border:none; background:none; gap:0;">
+                  <div class="tab active" style="padding:4px 10px; font-size:10px;">24H</div>
+                  <div class="tab" style="padding:4px 10px; font-size:10px;">7D</div>
+                  <div class="tab" style="padding:4px 10px; font-size:10px;">30D</div>
+                </div>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div class="chart-wrap">
+                <canvas id="activityChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right column -->
+        <div style="display:flex; flex-direction:column; gap:20px;">
+
+          <!-- Fell Warnings -->
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">
+                <svg class="panel-title-icon" style="color:var(--flame)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                Fell Warnings
+              </div>
+              <span class="badge badge-watching">3 Active</span>
+            </div>
+            <div class="panel-body">
+              <div class="alert-strip critical">
+                <span class="alert-strip-icon">🔥</span>
+                <div class="alert-strip-msg">
+                  <strong>Anomaly Detected</strong> — Shire region event spike ×340
+                </div>
+                <span class="alert-strip-time">02:14</span>
+              </div>
+              <div class="alert-strip warning">
+                <span class="alert-strip-icon">⚠</span>
+                <div class="alert-strip-msg">
+                  <strong>Palantír #3</strong> — Signal degradation in Orthanc node
+                </div>
+                <span class="alert-strip-time">01:47</span>
+              </div>
+              <div class="alert-strip warning">
+                <span class="alert-strip-icon">⚠</span>
+                <div class="alert-strip-msg">
+                  <strong>Coverage Gap</strong> — Lothlórien firewall blocked The Eye
+                </div>
+                <span class="alert-strip-time">00:33</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Watched Targets -->
+          <div class="panel" style="flex:1;">
+            <div class="panel-header">
+              <div class="panel-title">
+                <svg class="panel-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
+                Priority Targets
+              </div>
+              <button class="icon-btn" data-tooltip="Refresh targets">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+              </button>
+            </div>
+            <div class="panel-body no-pad scroll-body">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Target</th>
+                    <th>Status</th>
+                    <th>Threat</th>
+                  </tr>
+                </thead>
+                <tbody id="targetsTable">
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Doughnut chart -->
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">
+                <svg class="panel-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>
+                Data Source Mix
+              </div>
+            </div>
+            <div class="panel-body">
+              <div class="chart-wrap" style="height:160px;">
+                <canvas id="sourceChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Second row -->
+      <div class="content-grid-3">
+
+        <!-- Top Regions -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <svg class="panel-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
+              Coverage by Region
+            </div>
+          </div>
+          <div class="panel-body">
+            <div id="regionBars"></div>
+          </div>
+        </div>
+
+        <!-- Event Feed -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <svg class="panel-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+              Shadow Scroll — Live Feed
+            </div>
+            <span class="badge badge-active"><span class="badge-dot"></span>Live</span>
+          </div>
+          <div class="panel-body scroll-body" id="liveFeed" style="padding-top:8px; padding-bottom:8px;">
+          </div>
+        </div>
+
+        <!-- Metrics -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <svg class="panel-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+              System Vitals
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="metric-row">
+              <span class="metric-label"><span class="metric-label-dot"></span>Eye Throughput</span>
+              <span class="metric-value text-mono">4.7 PB/s</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-label"><span class="metric-label-dot"></span>Orcs Processing</span>
+              <span class="metric-value text-mono">144,000</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-label"><span class="metric-label-dot"></span>Corrupted Minds</span>
+              <span class="metric-value text-mono" style="color:var(--flame)">2,841</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-label"><span class="metric-label-dot"></span>One Ring Queries</span>
+              <span class="metric-value text-mono">∞</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-label"><span class="metric-label-dot"></span>Shadows Cast</span>
+              <span class="metric-value text-mono">99.97%</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-label"><span class="metric-label-dot"></span>Sauron's Gaze</span>
+              <span class="metric-value text-mono" style="color:var(--red-fire)">FOCUSED</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ─────────────────────────────────
+         PLACEHOLDER SECTIONS
+         ─────────────────────────────────  -->
+    <section id="section-streams" style="display:none;">
+      <div class="page-header">
+        <div class="page-title-wrap">
+          <div class="page-eyebrow">Streaming Analytics</div>
+          <h1 class="page-title">Dark <span>Fire</span></h1>
+          <p class="page-subtitle">Real-time event stream processing across all tributaries</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-primary">New Stream</button>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title">Stream Overview</div></div>
+        <div class="panel-body">
+          <div class="chart-wrap" style="height:300px;"><canvas id="streamsChart"></canvas></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="section-sources" style="display:none;">
+      <div class="page-header">
+        <div class="page-title-wrap">
+          <div class="page-eyebrow">Data Ingestion</div>
+          <h1 class="page-title">Mordor <span>Gates</span></h1>
+          <p class="page-subtitle">9 data sources feeding the Dark Tower</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-primary">Add Gate</button>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title">Connected Sources</div></div>
+        <div class="panel-body no-pad">
+          <table class="data-table" id="sourcesTable"></table>
+        </div>
+      </div>
+    </section>
+
+    <section id="section-query" style="display:none;">
+      <div class="page-header">
+        <div class="page-title-wrap">
+          <div class="page-eyebrow">Query Engine</div>
+          <h1 class="page-title">Black <span>Speech</span></h1>
+          <p class="page-subtitle">Speak queries in the ancient tongue</p>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title">Query Editor</div></div>
+        <div class="panel-body">
+          <div style="background:var(--dark); border:1px solid var(--border); border-radius:var(--radius); padding:20px; font-family:var(--font-mono); font-size:13px; color:var(--text-muted); line-height:1.8; min-height:200px;">
+            <span style="color:var(--red)">SELECT</span> soul_id, region, threat_level, last_seen<br/>
+            <span style="color:var(--red)">FROM</span> middle_earth.all_beings<br/>
+            <span style="color:var(--red)">WHERE</span> ring_bearer <span style="color:var(--flame)">=</span> <span style="color:var(--ember)">TRUE</span><br/>
+            &nbsp;&nbsp;<span style="color:var(--red)">AND</span> threat_level <span style="color:var(--flame)">&gt;</span> <span style="color:var(--ember)">9000</span><br/>
+            <span style="color:var(--red)">ORDER BY</span> threat_level <span style="color:var(--red)">DESC</span><br/>
+            <span style="color:var(--red)">LIMIT</span> <span style="color:var(--ember)">9</span><span style="color:var(--text-dim);">; -- Nine for mortal men doomed to die</span>
+            <span style="display:inline-block; width:2px; height:1em; background:var(--red-fire); vertical-align:middle; animation:blink 1s step-end infinite; margin-left:2px;"></span>
+          </div>
+          <div style="margin-top:12px; display:flex; gap:10px;">
+            <button class="btn btn-primary">Invoke Dark Magic</button>
+            <button class="btn btn-ghost">Save Inscription</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="section-reports" style="display:none;">
+      <div class="page-header">
+        <div class="page-title-wrap">
+          <div class="page-eyebrow">Automated Reports</div>
+          <h1 class="page-title">Nine <span>Rings</span></h1>
+          <p class="page-subtitle">Scheduled intelligence dispatched to ring-bearers</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-primary">Forge Ring</button>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title">Report Registry</div></div>
+        <div class="panel-body no-pad">
+          <table class="data-table" id="reportsTable"></table>
+        </div>
+      </div>
+    </section>
+
+    <section id="section-map" style="display:none;">
+      <div class="page-header">
+        <div class="page-title-wrap">
+          <div class="page-eyebrow">Geo-Intelligence</div>
+          <h1 class="page-title">Shadow <span>Map</span></h1>
+          <p class="page-subtitle">Geographic distribution of observed events</p>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title">Middle-earth Coverage</div></div>
+        <div class="panel-body">
+          <div id="shadowMap" style="height:400px; display:flex; align-items:center; justify-content:center; background:var(--dark); border-radius:var(--radius); position:relative; overflow:hidden;">
+            <canvas id="mapChart" style="position:absolute; inset:0; width:100%; height:100%;"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="section-agents" style="display:none;">
+      <div class="page-header">
+        <div class="page-title-wrap">
+          <div class="page-eyebrow">Agent Management</div>
+          <h1 class="page-title">Nazgûl <span>Agents</span></h1>
+          <p class="page-subtitle">The Nine — autonomous data collection agents</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-primary">Deploy Nazgûl</button>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title">Active Agents</div></div>
+        <div class="panel-body no-pad">
+          <table class="data-table" id="agentsTable"></table>
+        </div>
+      </div>
+    </section>
+
+    <section id="section-alerts" style="display:none;">
+      <div class="page-header">
+        <div class="page-title-wrap">
+          <div class="page-eyebrow">Alert Center</div>
+          <h1 class="page-title">Fell <span>Warnings</span></h1>
+          <p class="page-subtitle">Darkness stirs — attention required</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-ghost">Dismiss All</button>
+          <button class="btn btn-primary">New Rule</button>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title">Alert Log</div></div>
+        <div class="panel-body" id="alertsList"></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
