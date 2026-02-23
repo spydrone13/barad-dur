@@ -1130,9 +1130,9 @@ html, body {
 }
 
 .alert-strip.critical {
-  background: rgba(255,85,0,0.06);
-  border-left-color: var(--fire-orange);
-  color: var(--text);
+  background: rgba(220,30,30,0.12);
+  border-left-color: #ff2222;
+  color: #ff6666;
 }
 
 .alert-strip.warning {
