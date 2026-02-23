@@ -4,28 +4,35 @@
 
 'use strict';
 
-// ── Colour palette (mirrors CSS vars) ────────────────────────
+// ── Colour palette (mirrors CSS vars — steel/iron + fire) ────
 const C = {
-  abyss:    '#050002',
-  dark:     '#160509',
-  surface:  '#1e080c',
-  border:   '#4a0f18',
-  redDeep:  '#5c0a10',
-  redDark:  '#8b0000',
-  red:      '#c41e1e',
-  redFire:  '#ff2200',
-  orange:   '#ff5500',
-  flame:    '#ff8800',
-  ember:    '#ffaa00',
-  gold:     '#b8860b',
-  text:     '#e8c8c0',
-  textMut:  '#9a6060',
-  textDim:  '#5a3535',
+  black:      '#000000',
+  abyss:      '#030303',
+  dark:       '#111111',
+  surface:    '#181818',
+  border:     '#333333',
+  borderMid:  '#4a4a4a',
+  iron:       '#3c3c3c',
+  steelDark:  '#555555',
+  steel:      '#808080',
+  steelMid:   '#a0a0a0',
+  steelBright:'#c8c8c8',
+  chrome:     '#e0e0e0',
+  // Fire — eye elements only
+  fireDeep:   '#660000',
+  fireRed:    '#cc2200',
+  fireOrange: '#ff5500',
+  fireBright: '#ff8800',
+  fireEmber:  '#ffcc00',
+  // Text
+  text:       '#d8d8d8',
+  textMut:    '#888888',
+  textDim:    '#4a4a4a',
 };
 
 // ── Chart.js defaults ─────────────────────────────────────────
 Chart.defaults.color            = C.textMut;
-Chart.defaults.borderColor      = C.border;
+Chart.defaults.borderColor      = C.borderMid;
 Chart.defaults.font.family      = "'Rajdhani', sans-serif";
 Chart.defaults.plugins.legend.labels.usePointStyle = true;
 Chart.defaults.plugins.legend.labels.pointStyleWidth = 10;
@@ -105,10 +112,10 @@ function makeSpark(svgId, points, colorVar) {
 }
 
 function initSparklines() {
-  makeSpark('spark-0', [4, 8, 6, 14, 10, 18, 15, 24, 20, 28], C.redFire);
-  makeSpark('spark-1', [8, 12, 10, 16, 14, 20, 18, 22, 20, 24], C.red);
-  makeSpark('spark-2', [28, 28, 28, 28, 24, 28, 28, 28, 28, 28], C.flame);
-  makeSpark('spark-3', [22, 24, 20, 26, 24, 28, 26, 22, 24, 20], C.redDark);
+  makeSpark('spark-0', [4, 8, 6, 14, 10, 18, 15, 24, 20, 28], C.fireBright);
+  makeSpark('spark-1', [8, 12, 10, 16, 14, 20, 18, 22, 20, 24], C.steelMid);
+  makeSpark('spark-2', [28, 28, 28, 28, 24, 28, 28, 28, 28, 28], C.steelBright);
+  makeSpark('spark-3', [22, 24, 20, 26, 24, 28, 26, 22, 24, 20], C.steel);
 }
 
 // ── Activity Chart (main 24h line) ────────────────────────────
@@ -128,19 +135,19 @@ function initActivityChart() {
         {
           label: 'Observed Events (k)',
           data: base,
-          borderColor: C.red,
-          backgroundColor: `${C.red}18`,
+          borderColor: C.steelMid,
+          backgroundColor: `${C.steelDark}28`,
           fill: true,
           tension: 0.4,
           pointRadius: 0,
           pointHoverRadius: 4,
-          borderWidth: 2,
+          borderWidth: 1.5,
         },
         {
           label: 'Anomaly Overlay',
           data: spike,
-          borderColor: C.flame,
-          backgroundColor: `${C.flame}10`,
+          borderColor: C.fireBright,
+          backgroundColor: `${C.fireOrange}14`,
           fill: true,
           tension: 0.2,
           pointRadius: 0,
@@ -161,7 +168,7 @@ function initActivityChart() {
         },
         tooltip: {
           backgroundColor: C.surface,
-          borderColor: C.border,
+          borderColor: C.borderMid,
           borderWidth: 1,
           titleColor: C.text,
           bodyColor: C.textMut,
@@ -170,11 +177,11 @@ function initActivityChart() {
       },
       scales: {
         x: {
-          grid: { color: `${C.border}60` },
+          grid: { color: `${C.borderMid}50` },
           ticks: { color: C.textDim, font: { size: 10 }, maxTicksLimit: 8 },
         },
         y: {
-          grid: { color: `${C.border}60` },
+          grid: { color: `${C.borderMid}50` },
           ticks: { color: C.textDim, font: { size: 10 } },
         }
       }
