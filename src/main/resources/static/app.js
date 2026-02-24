@@ -723,62 +723,35 @@ function initMapChart() {
 let weeklyInit = false;
 
 function initWeeklyTable() {
-  // Week buckets: label + [start, end) — hard-coded to match LOTS target dates
-  const WEEK_BUCKETS = [
-    { label: 'Week of Feb 23', start: new Date(2026, 1, 23), end: new Date(2026, 2, 1)  },
-    { label: 'Week of Mar 1',  start: new Date(2026, 2, 1),  end: new Date(2026, 2, 8)  },
-    { label: 'Week of Mar 8',  start: new Date(2026, 2, 8),  end: new Date(2026, 2, 18) },
-    { label: 'Week of Mar 18', start: new Date(2026, 2, 18), end: new Date(2026, 2, 31) },
-  ];
+  fetch('/api/weekly-totals')
+    .then(r => r.json())
+    .then(data => renderWeeklyTable(data))
+    .catch(err => console.error('Weekly totals fetch failed:', err));
+}
 
-  const MONTH_IDX = { Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11 };
-
-  function parseTarget(str) {
-    const parts = str.trim().split(' ');
-    return new Date(2026, MONTH_IDX[parts[0]], parseInt(parts[1], 10));
-  }
-
-  function bucketOf(targetStr) {
-    const d = parseTarget(targetStr);
-    for (let i = WEEK_BUCKETS.length - 1; i >= 0; i--) {
-      if (d >= WEEK_BUCKETS[i].start && d < WEEK_BUCKETS[i].end) return i;
-    }
-    return -1;
-  }
-
-  // Accumulate wafers[weekIdx][stageIdx]
-  const grid = Array.from({ length: WEEK_BUCKETS.length }, () => new Array(STAGES.length).fill(0));
-  LOTS.forEach(lot => {
-    const wi = bucketOf(lot.target);
-    const si = STAGES.indexOf(lot.stage);
-    if (wi >= 0 && si >= 0) grid[wi][si] += lot.wafers;
-  });
-
-  // Max cell value for intensity scaling
-  const maxVal = Math.max(1, ...grid.flatMap(r => r));
-
+function renderWeeklyTable(data) {
+  // data.stages, data.rows[{weekLabel, cells, rowTotal}], data.maxCellValue
+  // — identical HTML-building logic to today's table, zero arithmetic —
   let html = '<table class="weekly-table"><thead><tr>';
   html += '<th class="wt-week-col">Week</th>';
-  STAGES.forEach(s => { html += `<th>${s}</th>`; });
+  data.stages.forEach(s => { html += `<th>${s}</th>`; });
   html += '<th class="wt-total-col">Total</th></tr></thead><tbody>';
 
-  WEEK_BUCKETS.forEach((week, wi) => {
-    const rowTotal = grid[wi].reduce((a, b) => a + b, 0);
+  data.rows.forEach(row => {
     html += '<tr>';
-    html += `<td class="wt-week-label">${week.label}</td>`;
-    grid[wi].forEach(v => {
+    html += `<td class="wt-week-label">${row.weekLabel}</td>`;
+    row.cells.forEach(v => {
       if (v === 0) {
         html += '<td class="wt-cell wt-empty">—</td>';
       } else {
-        const intensity = v / maxVal;
+        const intensity = v / data.maxCellValue;
         const alpha = (0.15 + intensity * 0.65).toFixed(2);
         const textColor = intensity > 0.55 ? '#ffcc00' : '#ff8800';
         html += `<td class="wt-cell wt-hot" style="background:rgba(255,85,0,${alpha});color:${textColor};">${v}</td>`;
       }
     });
-    const totalDisplay = rowTotal > 0 ? rowTotal : '—';
-    html += `<td class="wt-cell wt-total">${totalDisplay}</td>`;
-    html += '</tr>';
+    const totalDisplay = row.rowTotal > 0 ? row.rowTotal : '—';
+    html += `<td class="wt-cell wt-total">${totalDisplay}</td></tr>`;
   });
 
   html += '</tbody></table>';

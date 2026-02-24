@@ -1,4 +1,4 @@
-package com.spydrone.barad_dur;
+package com.spydrone.baraddur;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
