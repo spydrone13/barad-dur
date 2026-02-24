@@ -1357,6 +1357,102 @@ html, body {
   border: 1px solid var(--border);
 }
 
+/* ── Weekly Totals Matrix ────────────────────────────────────── */
+.weekly-table-wrap {
+  overflow-x: auto;
+  overflow-y: visible;
+}
+
+.weekly-table {
+  border-collapse: collapse;
+  font-size: 11px;
+  min-width: 960px;
+  width: 100%;
+}
+
+.weekly-table thead th {
+  padding: 9px 10px;
+  text-align: center;
+  font-size: 8px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  border-bottom: 1px solid var(--border);
+  background: var(--dark);
+  white-space: nowrap;
+  font-weight: 700;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.weekly-table thead th.wt-week-col {
+  text-align: left;
+  padding-left: 14px;
+  min-width: 136px;
+  position: sticky;
+  left: 0;
+  z-index: 3;
+}
+
+.weekly-table thead th.wt-total-col {
+  background: var(--surface-2);
+  color: var(--steel-mid);
+  border-left: 1px solid var(--border);
+}
+
+.weekly-table td {
+  padding: 10px;
+  border-bottom: 1px solid rgba(50,50,50,0.5);
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--steel-dark);
+  vertical-align: middle;
+  background: var(--surface);
+}
+
+.weekly-table tr:last-child td { border-bottom: none; }
+
+.weekly-table td.wt-week-label {
+  text-align: left;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--steel-mid);
+  background: var(--dark);
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  white-space: nowrap;
+  padding-left: 14px;
+  border-right: 1px solid var(--border);
+}
+
+.weekly-table td.wt-cell { font-family: var(--font-mono); }
+
+.weekly-table td.wt-empty {
+  color: var(--text-dim);
+  background: var(--dark);
+}
+
+.weekly-table td.wt-total {
+  background: var(--surface-2);
+  color: var(--steel-bright);
+  border-left: 1px solid var(--border);
+  font-weight: 700;
+}
+
+.weekly-table tr:hover td {
+  filter: brightness(1.12);
+}
+
+.weekly-table tr:hover td.wt-week-label {
+  color: var(--steel-bright);
+  filter: none;
+}
+
 .stage-chip {
   display: inline-block;
   font-family: var(--font-mono);
