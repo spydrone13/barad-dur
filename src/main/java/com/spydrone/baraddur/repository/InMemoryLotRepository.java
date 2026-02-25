@@ -1,0 +1,97 @@
+package com.spydrone.baraddur.repository;
+
+import com.spydrone.baraddur.model.Lot;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+@Repository
+public class InMemoryLotRepository implements LotRepository {
+
+    private final List<Lot> lots;
+
+    public InMemoryLotRepository() {
+        lots = List.of(
+                // Feb 2–8: PACKAGING / FINAL TEST / SHIP, on-track
+                new Lot("BD-26-0731", "BD-12 Mixed-Signal", 100, "SHIP",        "high",   "on-track", "E. Arwen",      "Feb 3"),
+                new Lot("BD-26-0737", "BD-14 Analog",        50, "FINAL TEST",  "normal", "on-track", "G. Grey",       "Feb 5"),
+                new Lot("BD-26-0743", "BD-7 Logic",           25, "PACKAGING",  "low",    "on-track", "M. Baggins",    "Feb 6"),
+                new Lot("BD-26-0748", "BD-5 SRAM",            50, "FINAL TEST", "high",   "on-track", "N. Shadow",     "Feb 7"),
+                new Lot("BD-26-0750", "BD-9 RF",              25, "PACKAGING",  "normal", "on-track", "O. Fangorn",    "Feb 8"),
+
+                // Feb 9–15: PROBE / CMP / PASSIVATION, on-track / delayed
+                new Lot("BD-26-0756", "BD-3 Power",           75, "PASSIVATION","high",   "on-track", "E. Arwen",      "Feb 10"),
+                new Lot("BD-26-0761", "BD-12 Mixed-Signal",  100, "PROBE",      "normal", "delayed",  "G. Grey",       "Feb 11"),
+                new Lot("BD-26-0764", "BD-7 Logic",           25, "CMP",        "low",    "on-track", "L. Greenleaf",  "Feb 12"),
+                new Lot("BD-26-0769", "BD-14 Analog",         50, "PASSIVATION","high",   "on-track", "A. Elessar",    "Feb 13"),
+                new Lot("BD-26-0773", "BD-5 SRAM",            50, "PROBE",      "normal", "on-track", "N. Shadow",     "Feb 14"),
+
+                // Feb 16–22: METAL / CVD / DIFFUSION, on-track / hold / delayed
+                new Lot("BD-26-0778", "BD-9 RF",              25, "DIFFUSION",  "high",   "on-track", "O. Fangorn",    "Feb 17"),
+                new Lot("BD-26-0781", "BD-3 Power",           75, "CVD",        "normal", "hold",     "T. Took",       "Feb 18"),
+                new Lot("BD-26-0783", "BD-12 Mixed-Signal",  100, "METAL",      "high",   "delayed",  "G. Stormcrow",  "Feb 19"),
+                new Lot("BD-26-0785", "BD-7 Logic",           25, "DIFFUSION",  "normal", "on-track", "M. Baggins",    "Feb 20"),
+                new Lot("BD-26-0787", "BD-14 Analog",         50, "CVD",        "low",    "on-track", "E. Arwen",      "Feb 21"),
+                new Lot("BD-26-0789", "BD-5 SRAM",            50, "METAL",      "normal", "on-track", "F. Baggins",    "Feb 22"),
+
+                // Feb 23–Mar 1: existing dataset
+                new Lot("BD-26-0891", "BD-7 Logic",   25, "LITHO",       "high",   "on-track", "M. Baggins",    "Mar 1"),
+                new Lot("BD-26-0892", "BD-7 Logic",   25, "ETCH",        "high",   "on-track", "S. Gamgee",     "Mar 1"),
+                new Lot("BD-26-0885", "BD-5 SRAM",    50, "OXIDATION",   "normal", "on-track", "L. Greenleaf",  "Mar 5"),
+                new Lot("BD-26-0880", "BD-5 SRAM",    50, "CVD",         "normal", "delayed",  "G. Stormcrow",  "Mar 3"),
+                new Lot("BD-26-0876", "BD-9 RF",      25, "METAL",       "high",   "on-track", "A. Elessar",    "Feb 26"),
+                new Lot("BD-26-0871", "BD-9 RF",      25, "PASSIVATION", "high",   "on-track", "A. Elessar",    "Feb 25"),
+                new Lot("BD-26-0865", "BD-7 Logic",   25, "PROBE",       "normal", "on-track", "B. Baggins",    "Feb 24"),
+                new Lot("BD-26-0860", "BD-3 Power",   75, "IMPLANT",     "low",    "hold",     "T. Took",       "Mar 10"),
+                new Lot("BD-26-0855", "BD-3 Power",   75, "WAFER START", "normal", "on-track", "M. Brandybuck", "Mar 18"),
+                new Lot("BD-26-0849", "BD-5 SRAM",    50, "DIFFUSION",   "normal", "on-track", "F. Baggins",    "Mar 6"),
+                new Lot("BD-26-0844", "BD-7 Logic",   25, "CMP",         "high",   "delayed",  "G. Stormcrow",  "Feb 27"),
+                new Lot("BD-26-0839", "BD-9 RF",      25, "DICING",      "normal", "on-track", "L. Greenleaf",  "Feb 24"),
+                new Lot("BD-26-0834", "BD-3 Power",   75, "PACKAGING",   "low",    "on-track", "S. Gamgee",     "Feb 25"),
+                new Lot("BD-26-0829", "BD-5 SRAM",    50, "FINAL TEST",  "high",   "on-track", "A. Elessar",    "Feb 23"),
+                new Lot("BD-26-0824", "BD-7 Logic",   25, "LITHO",       "normal", "hold",     "T. Took",       "Mar 4"),
+                new Lot("BD-26-0819", "BD-9 RF",      25, "ETCH",        "low",    "on-track", "M. Baggins",    "Mar 5"),
+                new Lot("BD-26-0814", "BD-3 Power",   75, "OXIDATION",   "normal", "on-track", "B. Baggins",    "Mar 12"),
+                new Lot("BD-26-0809", "BD-5 SRAM",    50, "CVD",         "high",   "on-track", "M. Brandybuck", "Mar 7"),
+                new Lot("BD-26-0804", "BD-7 Logic",   25, "METAL",       "normal", "on-track", "F. Baggins",    "Mar 2"),
+                new Lot("BD-26-0799", "BD-9 RF",      25, "PROBE",       "high",   "delayed",  "G. Stormcrow",  "Feb 24"),
+                new Lot("BD-26-0794", "BD-3 Power",   75, "IMPLANT",     "normal", "hold",     "T. Took",       "Mar 8"),
+
+                // Mar 9–15: OXIDATION / WAFER START, on-track / hold
+                new Lot("BD-26-0893", "BD-12 Mixed-Signal", 100, "OXIDATION",   "normal", "on-track", "G. Grey",    "Mar 9"),
+                new Lot("BD-26-0897", "BD-3 Power",          75, "WAFER START", "low",    "hold",     "N. Shadow",  "Mar 11"),
+                new Lot("BD-26-0902", "BD-14 Analog",         50, "OXIDATION",  "normal", "on-track", "O. Fangorn", "Mar 14"),
+
+                // Mar 16–22: WAFER START / OXIDATION, on-track
+                new Lot("BD-26-0908", "BD-9 RF",              25, "WAFER START", "low",    "on-track", "E. Arwen",      "Mar 16"),
+                new Lot("BD-26-0913", "BD-12 Mixed-Signal",  100, "OXIDATION",   "normal", "on-track", "G. Grey",       "Mar 19"),
+                new Lot("BD-26-0918", "BD-7 Logic",           25, "WAFER START", "low",    "on-track", "M. Brandybuck", "Mar 21"),
+
+                // Mar 23–29: WAFER START, on-track
+                new Lot("BD-26-0924", "BD-5 SRAM",    50, "WAFER START", "low", "on-track", "N. Shadow",  "Mar 24"),
+                new Lot("BD-26-0930", "BD-14 Analog", 100, "WAFER START", "low", "on-track", "O. Fangorn", "Mar 26"),
+                new Lot("BD-26-0936", "BD-3 Power",    75, "WAFER START", "low", "on-track", "F. Baggins", "Mar 28")
+        );
+    }
+
+    @Override
+    public List<Lot> findAll() {
+        return lots;
+    }
+
+    @Override
+    public List<Lot> findByStatus(String status) {
+        return lots.stream()
+                .filter(lot -> status.equals(lot.status()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<Lot> findById(String id) {
+        return lots.stream()
+                .filter(lot -> id.equals(lot.id()))
+                .findFirst();
+    }
+}

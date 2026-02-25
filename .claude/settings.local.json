@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd /c/Users/packe/workspace/barad-dur && ./mvnw.cmd clean package -q 2>&1)"
+    ]
+  }
+}
