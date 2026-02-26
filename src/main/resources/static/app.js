@@ -11,28 +11,35 @@ const STAGES = [
   'PROBE','DICING','PACKAGING','FINAL TEST','SHIP'
 ];
 
+const ORDERS = [
+  { id:'ORD-26-001', customer:'Gondor Electronics', product:'BD-7 Logic', orderDate:'Feb 1', dueDate:'Mar 8',  status:'in-progress', priority:'high'   },
+  { id:'ORD-26-002', customer:'Rivendell Systems',  product:'BD-5 SRAM',  orderDate:'Feb 3', dueDate:'Mar 10', status:'in-progress', priority:'normal' },
+  { id:'ORD-26-003', customer:'Mirkwood Comms',     product:'BD-9 RF',    orderDate:'Feb 5', dueDate:'Mar 5',  status:'in-progress', priority:'high'   },
+  { id:'ORD-26-004', customer:'Dwarven Foundry',    product:'BD-3 Power', orderDate:'Feb 8', dueDate:'Mar 20', status:'on-hold',     priority:'low'    },
+];
+
 const LOTS = [
-  { id:'BD-26-0891', product:'BD-7 Logic',  wafers:25, stage:'LITHO',       priority:'high',   status:'on-track', operator:'M. Baggins',   target:'Mar 1'  },
-  { id:'BD-26-0892', product:'BD-7 Logic',  wafers:25, stage:'ETCH',        priority:'high',   status:'on-track', operator:'S. Gamgee',    target:'Mar 1'  },
-  { id:'BD-26-0885', product:'BD-5 SRAM',   wafers:50, stage:'OXIDATION',   priority:'normal', status:'on-track', operator:'L. Greenleaf', target:'Mar 5'  },
-  { id:'BD-26-0880', product:'BD-5 SRAM',   wafers:50, stage:'CVD',         priority:'normal', status:'delayed',  operator:'G. Stormcrow', target:'Mar 3'  },
-  { id:'BD-26-0876', product:'BD-9 RF',     wafers:25, stage:'METAL',       priority:'high',   status:'on-track', operator:'A. Elessar',   target:'Feb 26' },
-  { id:'BD-26-0871', product:'BD-9 RF',     wafers:25, stage:'PASSIVATION', priority:'high',   status:'on-track', operator:'A. Elessar',   target:'Feb 25' },
-  { id:'BD-26-0865', product:'BD-7 Logic',  wafers:25, stage:'PROBE',       priority:'normal', status:'on-track', operator:'B. Baggins',   target:'Feb 24' },
-  { id:'BD-26-0860', product:'BD-3 Power',  wafers:75, stage:'IMPLANT',     priority:'low',    status:'hold',     operator:'T. Took',      target:'Mar 10' },
-  { id:'BD-26-0855', product:'BD-3 Power',  wafers:75, stage:'WAFER START', priority:'normal', status:'on-track', operator:'M. Brandybuck',target:'Mar 18' },
-  { id:'BD-26-0849', product:'BD-5 SRAM',   wafers:50, stage:'DIFFUSION',   priority:'normal', status:'on-track', operator:'F. Baggins',   target:'Mar 6'  },
-  { id:'BD-26-0844', product:'BD-7 Logic',  wafers:25, stage:'CMP',         priority:'high',   status:'delayed',  operator:'G. Stormcrow', target:'Feb 27' },
-  { id:'BD-26-0839', product:'BD-9 RF',     wafers:25, stage:'DICING',      priority:'normal', status:'on-track', operator:'L. Greenleaf', target:'Feb 24' },
-  { id:'BD-26-0834', product:'BD-3 Power',  wafers:75, stage:'PACKAGING',   priority:'low',    status:'on-track', operator:'S. Gamgee',    target:'Feb 25' },
-  { id:'BD-26-0829', product:'BD-5 SRAM',   wafers:50, stage:'FINAL TEST',  priority:'high',   status:'on-track', operator:'A. Elessar',   target:'Feb 23' },
-  { id:'BD-26-0824', product:'BD-7 Logic',  wafers:25, stage:'LITHO',       priority:'normal', status:'hold',     operator:'T. Took',      target:'Mar 4'  },
-  { id:'BD-26-0819', product:'BD-9 RF',     wafers:25, stage:'ETCH',        priority:'low',    status:'on-track', operator:'M. Baggins',   target:'Mar 5'  },
-  { id:'BD-26-0814', product:'BD-3 Power',  wafers:75, stage:'OXIDATION',   priority:'normal', status:'on-track', operator:'B. Baggins',   target:'Mar 12' },
-  { id:'BD-26-0809', product:'BD-5 SRAM',   wafers:50, stage:'CVD',         priority:'high',   status:'on-track', operator:'M. Brandybuck',target:'Mar 7'  },
-  { id:'BD-26-0804', product:'BD-7 Logic',  wafers:25, stage:'METAL',       priority:'normal', status:'on-track', operator:'F. Baggins',   target:'Mar 2'  },
-  { id:'BD-26-0799', product:'BD-9 RF',     wafers:25, stage:'PROBE',       priority:'high',   status:'delayed',  operator:'G. Stormcrow', target:'Feb 24' },
-  { id:'BD-26-0794', product:'BD-3 Power',  wafers:75, stage:'IMPLANT',     priority:'normal', status:'hold',     operator:'T. Took',      target:'Mar 8'  },
+  { id:'BD-26-0891', product:'BD-7 Logic',  wafers:25, stage:'LITHO',       priority:'high',   status:'on-track', operator:'M. Baggins',   target:'Mar 1',  orderId:'ORD-26-001' },
+  { id:'BD-26-0892', product:'BD-7 Logic',  wafers:25, stage:'ETCH',        priority:'high',   status:'on-track', operator:'S. Gamgee',    target:'Mar 1',  orderId:'ORD-26-001' },
+  { id:'BD-26-0885', product:'BD-5 SRAM',   wafers:50, stage:'OXIDATION',   priority:'normal', status:'on-track', operator:'L. Greenleaf', target:'Mar 5',  orderId:'ORD-26-002' },
+  { id:'BD-26-0880', product:'BD-5 SRAM',   wafers:50, stage:'CVD',         priority:'normal', status:'delayed',  operator:'G. Stormcrow', target:'Mar 3',  orderId:'ORD-26-002' },
+  { id:'BD-26-0876', product:'BD-9 RF',     wafers:25, stage:'METAL',       priority:'high',   status:'on-track', operator:'A. Elessar',   target:'Feb 26', orderId:'ORD-26-003' },
+  { id:'BD-26-0871', product:'BD-9 RF',     wafers:25, stage:'PASSIVATION', priority:'high',   status:'on-track', operator:'A. Elessar',   target:'Feb 25', orderId:'ORD-26-003' },
+  { id:'BD-26-0865', product:'BD-7 Logic',  wafers:25, stage:'PROBE',       priority:'normal', status:'on-track', operator:'B. Baggins',   target:'Feb 24', orderId:'ORD-26-001' },
+  { id:'BD-26-0860', product:'BD-3 Power',  wafers:75, stage:'IMPLANT',     priority:'low',    status:'hold',     operator:'T. Took',      target:'Mar 10', orderId:'ORD-26-004' },
+  { id:'BD-26-0855', product:'BD-3 Power',  wafers:75, stage:'WAFER START', priority:'normal', status:'on-track', operator:'M. Brandybuck',target:'Mar 18', orderId:'ORD-26-004' },
+  { id:'BD-26-0849', product:'BD-5 SRAM',   wafers:50, stage:'DIFFUSION',   priority:'normal', status:'on-track', operator:'F. Baggins',   target:'Mar 6',  orderId:'ORD-26-002' },
+  { id:'BD-26-0844', product:'BD-7 Logic',  wafers:25, stage:'CMP',         priority:'high',   status:'delayed',  operator:'G. Stormcrow', target:'Feb 27', orderId:'ORD-26-001' },
+  { id:'BD-26-0839', product:'BD-9 RF',     wafers:25, stage:'DICING',      priority:'normal', status:'on-track', operator:'L. Greenleaf', target:'Feb 24', orderId:'ORD-26-003' },
+  { id:'BD-26-0834', product:'BD-3 Power',  wafers:75, stage:'PACKAGING',   priority:'low',    status:'on-track', operator:'S. Gamgee',    target:'Feb 25', orderId:'ORD-26-004' },
+  { id:'BD-26-0829', product:'BD-5 SRAM',   wafers:50, stage:'FINAL TEST',  priority:'high',   status:'on-track', operator:'A. Elessar',   target:'Feb 23', orderId:'ORD-26-002' },
+  { id:'BD-26-0824', product:'BD-7 Logic',  wafers:25, stage:'LITHO',       priority:'normal', status:'hold',     operator:'T. Took',      target:'Mar 4',  orderId:'ORD-26-001' },
+  { id:'BD-26-0819', product:'BD-9 RF',     wafers:25, stage:'ETCH',        priority:'low',    status:'on-track', operator:'M. Baggins',   target:'Mar 5',  orderId:'ORD-26-003' },
+  { id:'BD-26-0814', product:'BD-3 Power',  wafers:75, stage:'OXIDATION',   priority:'normal', status:'on-track', operator:'B. Baggins',   target:'Mar 12', orderId:'ORD-26-004' },
+  { id:'BD-26-0809', product:'BD-5 SRAM',   wafers:50, stage:'CVD',         priority:'high',   status:'on-track', operator:'M. Brandybuck',target:'Mar 7',  orderId:'ORD-26-002' },
+  { id:'BD-26-0804', product:'BD-7 Logic',  wafers:25, stage:'METAL',       priority:'normal', status:'on-track', operator:'F. Baggins',   target:'Mar 2',  orderId:'ORD-26-001' },
+  { id:'BD-26-0799', product:'BD-9 RF',     wafers:25, stage:'PROBE',       priority:'high',   status:'delayed',  operator:'G. Stormcrow', target:'Feb 24', orderId:'ORD-26-003' },
+  { id:'BD-26-0794', product:'BD-3 Power',  wafers:75, stage:'IMPLANT',     priority:'normal', status:'hold',     operator:'T. Took',      target:'Mar 8',  orderId:'ORD-26-004' },
 ];
 
 function initPipeline() {
@@ -136,7 +143,7 @@ Chart.defaults.plugins.legend.labels.pointStyleWidth = 10;
 // ── Section router ────────────────────────────────────────────
 const sections = [
   'eye', 'streams', 'sources', 'query',
-  'reports', 'map', 'agents', 'alerts', 'weekly'
+  'reports', 'map', 'agents', 'alerts', 'weekly', 'orders'
 ];
 
 function showSection(name) {
@@ -159,6 +166,7 @@ function showSection(name) {
   if (name === 'alerts')   initAlertsList();
   if (name === 'map')      initMapChart();
   if (name === 'weekly' && !weeklyInit) { initWeeklyTable(); weeklyInit = true; }
+  if (name === 'orders' && !ordersInit) { initOrdersSection(); ordersInit = true; }
 }
 
 // ── Ring counter ──────────────────────────────────────────────
@@ -756,6 +764,86 @@ function renderWeeklyTable(data) {
 
   html += '</tbody></table>';
   document.getElementById('weeklyTableWrap').innerHTML = html;
+}
+
+// ── Orders section ────────────────────────────────────────────
+let ordersInit        = false;
+let selectedOrderId   = null;
+
+function initOrdersSection() {
+  renderOrdersTable();
+  renderOrderLots(null);
+}
+
+function renderOrdersTable() {
+  const tbody = document.getElementById('ordersTableBody');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+  ORDERS.forEach(o => {
+    const lots        = LOTS.filter(l => l.orderId === o.id);
+    const totalWafers = lots.reduce((s, l) => s + l.wafers, 0);
+    const hasDelayed  = lots.some(l => l.status === 'delayed');
+    const hasHold     = lots.some(l => l.status === 'hold');
+    const derivedStatus = o.status === 'on-hold' ? 'on-hold'
+                        : hasHold                ? 'on-hold'
+                        : hasDelayed             ? 'delayed'
+                        : o.status;
+    const statusClass = derivedStatus === 'in-progress' ? 'badge-on-track'
+                      : derivedStatus === 'delayed'      ? 'badge-delayed'
+                      : 'badge-hold';
+    const statusLabel = derivedStatus === 'in-progress' ? 'In Progress'
+                      : derivedStatus === 'delayed'      ? 'Delayed'
+                      : 'On Hold';
+    const priorityClass = `badge-priority-${o.priority}`;
+    const tr = document.createElement('tr');
+    tr.dataset.orderId = o.id;
+    tr.style.cursor = 'pointer';
+    tr.innerHTML = `
+      <td class="cell-name" style="font-size:12px;">${o.id}</td>
+      <td style="color:var(--steel-mid); font-size:12px;">${o.customer}</td>
+      <td style="color:var(--steel-mid); font-size:12px;">${o.product}</td>
+      <td><span class="badge ${priorityClass}">${o.priority}</span></td>
+      <td><span class="badge ${statusClass}"><span class="badge-dot"></span>${statusLabel}</span></td>
+      <td class="cell-mono" style="color:var(--text-muted);">${o.orderDate}</td>
+      <td class="cell-mono" style="color:var(--text-muted);">${o.dueDate}</td>
+      <td class="cell-mono">${lots.length}</td>
+      <td class="cell-mono">${totalWafers}</td>`;
+    tr.addEventListener('click', () => {
+      document.querySelectorAll('#ordersTableBody tr').forEach(r => r.classList.remove('selected'));
+      if (selectedOrderId === o.id) {
+        selectedOrderId = null;
+        renderOrderLots(null);
+      } else {
+        tr.classList.add('selected');
+        selectedOrderId = o.id;
+        renderOrderLots(o.id);
+      }
+    });
+    tbody.appendChild(tr);
+  });
+}
+
+function renderOrderLots(orderId) {
+  const lots  = orderId ? LOTS.filter(l => l.orderId === orderId) : LOTS;
+  const label = orderId ? `Lots — ${ORDERS.find(o => o.id === orderId)?.id}` : 'All Lots';
+  const title = document.getElementById('orderLotsTitle');
+  if (title) title.textContent = label;
+  const tbody = document.getElementById('orderLotsBody');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+  lots.forEach(l => {
+    const statusClass   = l.status === 'on-track' ? 'badge-on-track' : l.status === 'delayed' ? 'badge-delayed' : 'badge-hold';
+    const statusLabel   = l.status === 'on-track' ? 'On Track' : l.status === 'delayed' ? 'Delayed' : 'On Hold';
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="cell-name" style="font-size:12px;">${l.id}</td>
+      <td class="cell-mono">${l.wafers}</td>
+      <td><span class="stage-chip">${l.stage}</span></td>
+      <td><span class="badge ${statusClass}"><span class="badge-dot"></span>${statusLabel}</span></td>
+      <td style="color:var(--text-muted); font-size:12px;">${l.operator}</td>
+      <td class="cell-mono" style="color:var(--text-muted);">${l.target}</td>`;
+    tbody.appendChild(tr);
+  });
 }
 
 // ── Boot ──────────────────────────────────────────────────────

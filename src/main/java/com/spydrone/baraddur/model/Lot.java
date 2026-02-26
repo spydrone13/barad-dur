@@ -8,5 +8,6 @@ public record Lot(
         String priority,
         String status,
         String operator,
-        String target
+        String target,
+        String orderId
 ) {}
