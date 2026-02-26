@@ -768,23 +768,28 @@ function renderWeeklyTable(data) {
 }
 
 // ── Orders section ────────────────────────────────────────────
-let ordersInit        = false;
-let selectedOrderId   = null;
+let ordersInit      = false;
+let selectedOrderId = null;
+let ordersData      = [];   // cached List<OrderResponse> from /api/orders
 
 function initOrdersSection() {
-  renderOrdersTable();
-  renderOrderLots(null);
+  fetch('/api/orders')
+    .then(r => r.json())
+    .then(data => {
+      ordersData = data;
+      renderOrdersTable(data);
+      renderOrderLots(null);
+    })
+    .catch(err => console.error('Orders fetch failed:', err));
 }
 
-function renderOrdersTable() {
+function renderOrdersTable(data) {
   const tbody = document.getElementById('ordersTableBody');
   if (!tbody) return;
   tbody.innerHTML = '';
-  ORDERS.forEach(o => {
-    const orderLots   = lots.filter(l => l.orderId === o.id);
-    const totalWafers = orderLots.reduce((s, l) => s + l.wafers, 0);
-    const hasDelayed  = orderLots.some(l => l.status === 'delayed');
-    const hasHold     = orderLots.some(l => l.status === 'hold');
+  data.forEach(({ order: o, lots: orderLots, lotCount, totalWafers }) => {
+    const hasDelayed    = orderLots.some(l => l.status === 'delayed');
+    const hasHold       = orderLots.some(l => l.status === 'hold');
     const derivedStatus = o.status === 'on-hold' ? 'on-hold'
                         : hasHold                ? 'on-hold'
                         : hasDelayed             ? 'delayed'
@@ -807,7 +812,7 @@ function renderOrdersTable() {
       <td><span class="badge ${statusClass}"><span class="badge-dot"></span>${statusLabel}</span></td>
       <td class="cell-mono" style="color:var(--text-muted);">${o.orderDate}</td>
       <td class="cell-mono" style="color:var(--text-muted);">${o.dueDate}</td>
-      <td class="cell-mono">${orderLots.length}</td>
+      <td class="cell-mono">${lotCount}</td>
       <td class="cell-mono">${totalWafers}</td>`;
     tr.addEventListener('click', () => {
       document.querySelectorAll('#ordersTableBody tr').forEach(r => r.classList.remove('selected'));
@@ -825,16 +830,17 @@ function renderOrdersTable() {
 }
 
 function renderOrderLots(orderId) {
-  const orderLots = orderId ? lots.filter(l => l.orderId === orderId) : lots;
-  const label = orderId ? `Lots — ${ORDERS.find(o => o.id === orderId)?.id}` : 'All Lots';
+  const entry     = orderId ? ordersData.find(d => d.order.id === orderId) : null;
+  const orderLots = entry ? entry.lots : ordersData.flatMap(d => d.lots);
+  const label     = orderId ? `Lots — ${orderId}` : 'All Lots';
   const title = document.getElementById('orderLotsTitle');
   if (title) title.textContent = label;
   const tbody = document.getElementById('orderLotsBody');
   if (!tbody) return;
   tbody.innerHTML = '';
   orderLots.forEach(l => {
-    const statusClass   = l.status === 'on-track' ? 'badge-on-track' : l.status === 'delayed' ? 'badge-delayed' : 'badge-hold';
-    const statusLabel   = l.status === 'on-track' ? 'On Track' : l.status === 'delayed' ? 'Delayed' : 'On Hold';
+    const statusClass = l.status === 'on-track' ? 'badge-on-track' : l.status === 'delayed' ? 'badge-delayed' : 'badge-hold';
+    const statusLabel = l.status === 'on-track' ? 'On Track' : l.status === 'delayed' ? 'Delayed' : 'On Hold';
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td class="cell-name" style="font-size:12px;">${l.id}</td>
