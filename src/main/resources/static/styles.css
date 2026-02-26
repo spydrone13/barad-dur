@@ -1458,6 +1458,19 @@ html, body {
   filter: none;
 }
 
+/* Narrower padding for sub-columns W / L / O */
+.weekly-table td.wt-sub,
+.weekly-table thead th.wt-sub {
+  padding: 8px 6px;
+  min-width: 32px;
+}
+
+/* Divider between stage groups */
+.weekly-table td.wt-group-start,
+.weekly-table thead th.wt-group-start {
+  border-left: 1px solid var(--border);
+}
+
 .stage-chip {
   display: inline-block;
   font-family: var(--font-mono);

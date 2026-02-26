@@ -739,26 +739,69 @@ function initWeeklyTable() {
 }
 
 function renderWeeklyTable(data) {
-  // data.stages, data.rows[{weekLabel, cells, rowTotal}], data.maxCellValue
-  // — identical HTML-building logic to today's table, zero arithmetic —
-  let html = '<table class="weekly-table"><thead><tr>';
-  html += '<th class="wt-week-col">Week</th>';
-  data.stages.forEach(s => { html += `<th>${s}</th>`; });
-  html += '<th class="wt-total-col">Total</th></tr></thead><tbody>';
+  // Two-row header: row 1 has stage names spanning 3 sub-cols each; row 2 has W/L/O labels
+  let html = '<table class="weekly-table"><thead>';
+
+  // Header row 1 — stage group names
+  html += '<tr>';
+  html += '<th class="wt-week-col" rowspan="2">Week</th>';
+  data.stages.forEach(s => { html += `<th colspan="3" class="wt-group-start">${s}</th>`; });
+  html += '<th class="wt-total-col" rowspan="2">Total</th>';
+  html += '</tr>';
+
+  // Header row 2 — W / L / O per stage
+  html += '<tr>';
+  data.stages.forEach(() => {
+    html += '<th class="wt-sub wt-group-start">W</th>';
+    html += '<th class="wt-sub">L</th>';
+    html += '<th class="wt-sub">O</th>';
+  });
+  html += '</tr>';
+
+  html += '</thead><tbody>';
 
   data.rows.forEach(row => {
     html += '<tr>';
     html += `<td class="wt-week-label">${row.weekLabel}</td>`;
-    row.cells.forEach(v => {
-      if (v === 0) {
-        html += '<td class="wt-cell wt-empty">—</td>';
+
+    row.waferCells.forEach((w, i) => {
+      const l = row.lotCells[i];
+      const o = row.orderCells[i];
+      const allZero = w === 0 && l === 0 && o === 0;
+
+      if (allZero) {
+        html += '<td class="wt-cell wt-sub wt-group-start wt-empty">—</td>';
+        html += '<td class="wt-cell wt-sub wt-empty">—</td>';
+        html += '<td class="wt-cell wt-sub wt-empty">—</td>';
       } else {
-        const intensity = v / data.maxCellValue;
-        const alpha = (0.15 + intensity * 0.65).toFixed(2);
-        const textColor = intensity > 0.55 ? '#ffcc00' : '#ff8800';
-        html += `<td class="wt-cell wt-hot" style="background:rgba(255,85,0,${alpha});color:${textColor};">${v}</td>`;
+        // Wafer cell — fire-orange heat-map
+        if (w === 0) {
+          html += '<td class="wt-cell wt-sub wt-group-start wt-empty">—</td>';
+        } else {
+          const wIntensity = w / data.maxWaferValue;
+          const wAlpha = (0.15 + wIntensity * 0.65).toFixed(2);
+          const wColor = wIntensity > 0.55 ? '#ffcc00' : '#ff8800';
+          html += `<td class="wt-cell wt-sub wt-group-start wt-hot" style="background:rgba(255,85,0,${wAlpha});color:${wColor};">${w}</td>`;
+        }
+        // Lot cell — steel heat-map
+        if (l === 0) {
+          html += '<td class="wt-cell wt-sub wt-empty">—</td>';
+        } else {
+          const lIntensity = l / data.maxLotValue;
+          const lAlpha = (0.15 + lIntensity * 0.65).toFixed(2);
+          html += `<td class="wt-cell wt-sub" style="background:rgba(160,160,160,${lAlpha});color:#c8c8c8;">${l}</td>`;
+        }
+        // Order cell — dimmer steel
+        if (o === 0) {
+          html += '<td class="wt-cell wt-sub wt-empty">—</td>';
+        } else {
+          const oIntensity = o / data.maxOrderValue;
+          const oAlpha = (0.15 + oIntensity * 0.65).toFixed(2);
+          html += `<td class="wt-cell wt-sub" style="background:rgba(100,100,100,${oAlpha});color:#a0a0a0;">${o}</td>`;
+        }
       }
     });
+
     const totalDisplay = row.rowTotal > 0 ? row.rowTotal : '—';
     html += `<td class="wt-cell wt-total">${totalDisplay}</td></tr>`;
   });

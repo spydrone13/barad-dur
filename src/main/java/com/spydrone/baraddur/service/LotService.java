@@ -12,9 +12,11 @@ import java.time.LocalDate;
 import java.time.MonthDay;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class LotService {
@@ -79,7 +81,13 @@ public class LotService {
         );
 
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("MMM d", Locale.ENGLISH);
-        int[][] grid = new int[buckets.size()][STAGES.size()];
+        int[][] waferGrid = new int[buckets.size()][STAGES.size()];
+        int[][] lotGrid   = new int[buckets.size()][STAGES.size()];
+        @SuppressWarnings("unchecked")
+        Set<String>[][] orderSets = new HashSet[buckets.size()][STAGES.size()];
+        for (int wi = 0; wi < buckets.size(); wi++)
+            for (int si = 0; si < STAGES.size(); si++)
+                orderSets[wi][si] = new HashSet<>();
 
         for (Lot lot : lotRepository.findAll()) {
             MonthDay md = MonthDay.parse(lot.target(), fmt);
@@ -93,22 +101,35 @@ public class LotService {
                 }
             }
             int si = STAGES.indexOf(lot.stage());
-            if (wi >= 0 && si >= 0) grid[wi][si] += lot.wafers();
+            if (wi >= 0 && si >= 0) {
+                waferGrid[wi][si] += lot.wafers();
+                lotGrid[wi][si]   += 1;
+                if (lot.orderId() != null) orderSets[wi][si].add(lot.orderId());
+            }
         }
 
-        int maxCellValue = 1;
+        int maxWaferValue = 1, maxLotValue = 1, maxOrderValue = 1;
         List<WeeklyRow> rows = new ArrayList<>();
         for (int wi = 0; wi < buckets.size(); wi++) {
-            List<Integer> cells = new ArrayList<>();
+            List<Integer> waferCells = new ArrayList<>();
+            List<Integer> lotCells   = new ArrayList<>();
+            List<Integer> orderCells = new ArrayList<>();
             int rowTotal = 0;
             for (int si = 0; si < STAGES.size(); si++) {
-                cells.add(grid[wi][si]);
-                rowTotal += grid[wi][si];
-                if (grid[wi][si] > maxCellValue) maxCellValue = grid[wi][si];
+                int w = waferGrid[wi][si];
+                int l = lotGrid[wi][si];
+                int o = orderSets[wi][si].size();
+                waferCells.add(w);
+                lotCells.add(l);
+                orderCells.add(o);
+                rowTotal += w;
+                if (w > maxWaferValue) maxWaferValue = w;
+                if (l > maxLotValue)   maxLotValue   = l;
+                if (o > maxOrderValue) maxOrderValue  = o;
             }
-            rows.add(new WeeklyRow(buckets.get(wi).label(), cells, rowTotal));
+            rows.add(new WeeklyRow(buckets.get(wi).label(), waferCells, lotCells, orderCells, rowTotal));
         }
 
-        return new WeeklyTotalsResponse(STAGES, rows, maxCellValue);
+        return new WeeklyTotalsResponse(STAGES, rows, maxWaferValue, maxLotValue, maxOrderValue);
     }
 }
