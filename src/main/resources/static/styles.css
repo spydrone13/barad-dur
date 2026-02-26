@@ -436,7 +436,7 @@ html, body {
 }
 
 .page-title {
-  font-family: var(--font-display);
+  font-family: var(--font-ui);
   font-size: 26px;
   font-weight: 900;
   letter-spacing: 3px;
@@ -651,7 +651,7 @@ html, body {
 }
 
 .panel-title {
-  font-family: var(--font-display);
+  font-family: var(--font-ui);
   font-size: 11px;
   letter-spacing: 2.5px;
   text-transform: uppercase;

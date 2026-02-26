@@ -12,45 +12,25 @@ const STAGES = [
 ];
 
 const ORDERS = [
-  { id:'ORD-26-001', customer:'Gondor Electronics', product:'BD-7 Logic', orderDate:'Feb 1', dueDate:'Mar 8',  status:'in-progress', priority:'high'   },
-  { id:'ORD-26-002', customer:'Rivendell Systems',  product:'BD-5 SRAM',  orderDate:'Feb 3', dueDate:'Mar 10', status:'in-progress', priority:'normal' },
-  { id:'ORD-26-003', customer:'Mirkwood Comms',     product:'BD-9 RF',    orderDate:'Feb 5', dueDate:'Mar 5',  status:'in-progress', priority:'high'   },
-  { id:'ORD-26-004', customer:'Dwarven Foundry',    product:'BD-3 Power', orderDate:'Feb 8', dueDate:'Mar 20', status:'on-hold',     priority:'low'    },
+  { id:'ORD-26-001', customer:'Gondor Electronics', product:'BD-7 Logic',         orderDate:'Feb 1',  dueDate:'Mar 8',  status:'in-progress', priority:'high'   },
+  { id:'ORD-26-002', customer:'Rivendell Systems',  product:'BD-5 SRAM',          orderDate:'Feb 3',  dueDate:'Mar 10', status:'in-progress', priority:'normal' },
+  { id:'ORD-26-003', customer:'Mirkwood Comms',     product:'BD-9 RF',            orderDate:'Feb 5',  dueDate:'Mar 5',  status:'in-progress', priority:'high'   },
+  { id:'ORD-26-004', customer:'Dwarven Foundry',    product:'BD-3 Power',         orderDate:'Feb 8',  dueDate:'Mar 20', status:'on-hold',     priority:'low'    },
+  { id:'ORD-26-005', customer:'Elrond Integrated',  product:'BD-12 Mixed-Signal', orderDate:'Jan 20', dueDate:'Mar 15', status:'in-progress', priority:'normal' },
+  { id:'ORD-26-006', customer:'Lothlórien Devices', product:'BD-14 Analog',       orderDate:'Jan 25', dueDate:'Mar 28', status:'in-progress', priority:'low'    },
 ];
 
-const LOTS = [
-  { id:'BD-26-0891', product:'BD-7 Logic',  wafers:25, stage:'LITHO',       priority:'high',   status:'on-track', operator:'M. Baggins',   target:'Mar 1',  orderId:'ORD-26-001' },
-  { id:'BD-26-0892', product:'BD-7 Logic',  wafers:25, stage:'ETCH',        priority:'high',   status:'on-track', operator:'S. Gamgee',    target:'Mar 1',  orderId:'ORD-26-001' },
-  { id:'BD-26-0885', product:'BD-5 SRAM',   wafers:50, stage:'OXIDATION',   priority:'normal', status:'on-track', operator:'L. Greenleaf', target:'Mar 5',  orderId:'ORD-26-002' },
-  { id:'BD-26-0880', product:'BD-5 SRAM',   wafers:50, stage:'CVD',         priority:'normal', status:'delayed',  operator:'G. Stormcrow', target:'Mar 3',  orderId:'ORD-26-002' },
-  { id:'BD-26-0876', product:'BD-9 RF',     wafers:25, stage:'METAL',       priority:'high',   status:'on-track', operator:'A. Elessar',   target:'Feb 26', orderId:'ORD-26-003' },
-  { id:'BD-26-0871', product:'BD-9 RF',     wafers:25, stage:'PASSIVATION', priority:'high',   status:'on-track', operator:'A. Elessar',   target:'Feb 25', orderId:'ORD-26-003' },
-  { id:'BD-26-0865', product:'BD-7 Logic',  wafers:25, stage:'PROBE',       priority:'normal', status:'on-track', operator:'B. Baggins',   target:'Feb 24', orderId:'ORD-26-001' },
-  { id:'BD-26-0860', product:'BD-3 Power',  wafers:75, stage:'IMPLANT',     priority:'low',    status:'hold',     operator:'T. Took',      target:'Mar 10', orderId:'ORD-26-004' },
-  { id:'BD-26-0855', product:'BD-3 Power',  wafers:75, stage:'WAFER START', priority:'normal', status:'on-track', operator:'M. Brandybuck',target:'Mar 18', orderId:'ORD-26-004' },
-  { id:'BD-26-0849', product:'BD-5 SRAM',   wafers:50, stage:'DIFFUSION',   priority:'normal', status:'on-track', operator:'F. Baggins',   target:'Mar 6',  orderId:'ORD-26-002' },
-  { id:'BD-26-0844', product:'BD-7 Logic',  wafers:25, stage:'CMP',         priority:'high',   status:'delayed',  operator:'G. Stormcrow', target:'Feb 27', orderId:'ORD-26-001' },
-  { id:'BD-26-0839', product:'BD-9 RF',     wafers:25, stage:'DICING',      priority:'normal', status:'on-track', operator:'L. Greenleaf', target:'Feb 24', orderId:'ORD-26-003' },
-  { id:'BD-26-0834', product:'BD-3 Power',  wafers:75, stage:'PACKAGING',   priority:'low',    status:'on-track', operator:'S. Gamgee',    target:'Feb 25', orderId:'ORD-26-004' },
-  { id:'BD-26-0829', product:'BD-5 SRAM',   wafers:50, stage:'FINAL TEST',  priority:'high',   status:'on-track', operator:'A. Elessar',   target:'Feb 23', orderId:'ORD-26-002' },
-  { id:'BD-26-0824', product:'BD-7 Logic',  wafers:25, stage:'LITHO',       priority:'normal', status:'hold',     operator:'T. Took',      target:'Mar 4',  orderId:'ORD-26-001' },
-  { id:'BD-26-0819', product:'BD-9 RF',     wafers:25, stage:'ETCH',        priority:'low',    status:'on-track', operator:'M. Baggins',   target:'Mar 5',  orderId:'ORD-26-003' },
-  { id:'BD-26-0814', product:'BD-3 Power',  wafers:75, stage:'OXIDATION',   priority:'normal', status:'on-track', operator:'B. Baggins',   target:'Mar 12', orderId:'ORD-26-004' },
-  { id:'BD-26-0809', product:'BD-5 SRAM',   wafers:50, stage:'CVD',         priority:'high',   status:'on-track', operator:'M. Brandybuck',target:'Mar 7',  orderId:'ORD-26-002' },
-  { id:'BD-26-0804', product:'BD-7 Logic',  wafers:25, stage:'METAL',       priority:'normal', status:'on-track', operator:'F. Baggins',   target:'Mar 2',  orderId:'ORD-26-001' },
-  { id:'BD-26-0799', product:'BD-9 RF',     wafers:25, stage:'PROBE',       priority:'high',   status:'delayed',  operator:'G. Stormcrow', target:'Feb 24', orderId:'ORD-26-003' },
-  { id:'BD-26-0794', product:'BD-3 Power',  wafers:75, stage:'IMPLANT',     priority:'normal', status:'hold',     operator:'T. Took',      target:'Mar 8',  orderId:'ORD-26-004' },
-];
+let lots = [];
 
 function initPipeline() {
   const track = document.getElementById('pipelineTrack');
   if (!track) return;
   track.innerHTML = '';
   STAGES.forEach((stage, i) => {
-    const lots    = LOTS.filter(l => l.stage === stage);
-    const hasHold = lots.some(l => l.status === 'hold');
-    const hasDel  = lots.some(l => l.status === 'delayed');
-    const count   = lots.length;
+    const stageLots = lots.filter(l => l.stage === stage);
+    const hasHold = stageLots.some(l => l.status === 'hold');
+    const hasDel  = stageLots.some(l => l.status === 'delayed');
+    const count   = stageLots.length;
 
     let boxClass   = 'stage-box';
     let countClass = 'stage-count';
@@ -76,7 +56,7 @@ function initPipeline() {
 function renderLotsTable(filter) {
   const tbody = document.getElementById('lotsTableBody');
   if (!tbody) return;
-  const filtered = filter === 'all' ? LOTS : LOTS.filter(l => l.status === filter);
+  const filtered = filter === 'all' ? lots : lots.filter(l => l.status === filter);
   tbody.innerHTML = '';
   filtered.forEach(l => {
     const statusClass    = l.status === 'on-track' ? 'badge-on-track' : l.status === 'delayed' ? 'badge-delayed' : 'badge-hold';
@@ -97,7 +77,6 @@ function renderLotsTable(filter) {
 }
 
 function initLotsTable() {
-  renderLotsTable('all');
   document.getElementById('lotFilterTabs').addEventListener('click', e => {
     const tab = e.target.closest('[data-filter]');
     if (!tab) return;
@@ -105,6 +84,28 @@ function initLotsTable() {
     tab.classList.add('active');
     renderLotsTable(tab.dataset.filter);
   });
+}
+
+async function initLotOverview() {
+  try {
+    const [summaryRes, lotsRes] = await Promise.all([
+      fetch('/api/lots/summary'),
+      fetch('/api/lots'),
+    ]);
+    const summary = await summaryRes.json();
+    const data    = await lotsRes.json();
+
+    const elActive = document.getElementById('kpi-active-lots');
+    const elHold   = document.getElementById('kpi-on-hold');
+    if (elActive) elActive.textContent = summary.activeLots;
+    if (elHold)   elHold.textContent   = summary.onHold;
+
+    lots = data;
+    initPipeline();
+    renderLotsTable('all');
+  } catch (err) {
+    console.error('Lot Overview fetch failed:', err);
+  }
 }
 
 // ── Colour palette (mirrors CSS vars — steel/iron + fire) ────
@@ -780,10 +781,10 @@ function renderOrdersTable() {
   if (!tbody) return;
   tbody.innerHTML = '';
   ORDERS.forEach(o => {
-    const lots        = LOTS.filter(l => l.orderId === o.id);
-    const totalWafers = lots.reduce((s, l) => s + l.wafers, 0);
-    const hasDelayed  = lots.some(l => l.status === 'delayed');
-    const hasHold     = lots.some(l => l.status === 'hold');
+    const orderLots   = lots.filter(l => l.orderId === o.id);
+    const totalWafers = orderLots.reduce((s, l) => s + l.wafers, 0);
+    const hasDelayed  = orderLots.some(l => l.status === 'delayed');
+    const hasHold     = orderLots.some(l => l.status === 'hold');
     const derivedStatus = o.status === 'on-hold' ? 'on-hold'
                         : hasHold                ? 'on-hold'
                         : hasDelayed             ? 'delayed'
@@ -806,7 +807,7 @@ function renderOrdersTable() {
       <td><span class="badge ${statusClass}"><span class="badge-dot"></span>${statusLabel}</span></td>
       <td class="cell-mono" style="color:var(--text-muted);">${o.orderDate}</td>
       <td class="cell-mono" style="color:var(--text-muted);">${o.dueDate}</td>
-      <td class="cell-mono">${lots.length}</td>
+      <td class="cell-mono">${orderLots.length}</td>
       <td class="cell-mono">${totalWafers}</td>`;
     tr.addEventListener('click', () => {
       document.querySelectorAll('#ordersTableBody tr').forEach(r => r.classList.remove('selected'));
@@ -824,14 +825,14 @@ function renderOrdersTable() {
 }
 
 function renderOrderLots(orderId) {
-  const lots  = orderId ? LOTS.filter(l => l.orderId === orderId) : LOTS;
+  const orderLots = orderId ? lots.filter(l => l.orderId === orderId) : lots;
   const label = orderId ? `Lots — ${ORDERS.find(o => o.id === orderId)?.id}` : 'All Lots';
   const title = document.getElementById('orderLotsTitle');
   if (title) title.textContent = label;
   const tbody = document.getElementById('orderLotsBody');
   if (!tbody) return;
   tbody.innerHTML = '';
-  lots.forEach(l => {
+  orderLots.forEach(l => {
     const statusClass   = l.status === 'on-track' ? 'badge-on-track' : l.status === 'delayed' ? 'badge-delayed' : 'badge-hold';
     const statusLabel   = l.status === 'on-track' ? 'On Track' : l.status === 'delayed' ? 'Delayed' : 'On Hold';
     const tr = document.createElement('tr');
@@ -850,6 +851,6 @@ function renderOrderLots(orderId) {
 document.addEventListener('DOMContentLoaded', () => {
   initRingDots();
   initSparklines();
-  initPipeline();
   initLotsTable();
+  initLotOverview();
 });
