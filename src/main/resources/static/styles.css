@@ -1406,6 +1406,21 @@ html, body {
   border-left: 1px solid var(--border);
 }
 
+/* Stage group name headers — larger, mixed-case, less tracking */
+.weekly-table thead th.wt-group-start:not(.wt-sub) {
+  font-size: 11px;
+  letter-spacing: 0.3px;
+  text-transform: none;
+  color: var(--steel-mid);
+}
+
+/* W / L / O sub-column labels — bump size and contrast */
+.weekly-table thead th.wt-sub {
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+}
+
 .weekly-table td {
   padding: 10px;
   border-bottom: 1px solid rgba(50,50,50,0.5);

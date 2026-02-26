@@ -738,6 +738,13 @@ function initWeeklyTable() {
     .catch(err => console.error('Weekly totals fetch failed:', err));
 }
 
+const WT_ACRONYMS = new Set(['CVD', 'CMP']);
+function stageDisplayName(s) {
+  return s.split(' ')
+    .map(w => WT_ACRONYMS.has(w) ? w : w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+    .join(' ');
+}
+
 function renderWeeklyTable(data) {
   // Two-row header: row 1 has stage names spanning 3 sub-cols each; row 2 has W/L/O labels
   let html = '<table class="weekly-table"><thead>';
@@ -745,7 +752,7 @@ function renderWeeklyTable(data) {
   // Header row 1 — stage group names
   html += '<tr>';
   html += '<th class="wt-week-col" rowspan="2">Week</th>';
-  data.stages.forEach(s => { html += `<th colspan="3" class="wt-group-start">${s}</th>`; });
+  data.stages.forEach(s => { html += `<th colspan="3" class="wt-group-start">${stageDisplayName(s)}</th>`; });
   html += '<th class="wt-total-col" rowspan="2">Total</th>';
   html += '</tr>';
 
