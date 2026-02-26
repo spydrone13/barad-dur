@@ -533,6 +533,16 @@
   </main>
 </div>
 
+<div id="wtModal" class="wt-modal-overlay" style="display:none" onclick="if(event.target===this)closeWtModal()">
+  <div class="wt-modal">
+    <div class="wt-modal-header">
+      <span class="wt-modal-title" id="wtModalTitle"></span>
+      <button class="wt-modal-close" onclick="closeWtModal()">×</button>
+    </div>
+    <div class="wt-modal-body" id="wtModalBody"></div>
+  </div>
+</div>
+
 <script src="app.js"></script>
 </body>
 </html>

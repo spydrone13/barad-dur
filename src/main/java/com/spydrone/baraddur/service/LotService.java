@@ -66,10 +66,10 @@ public class LotService {
         return new OrderResponse(order, lots, lots.size(), totalWafers);
     }
 
-    public WeeklyTotalsResponse getWeeklyTotals() {
-        record WeekBucket(String label, LocalDate start, LocalDate end) {}
+    private record WeekBucket(String label, LocalDate start, LocalDate end) {}
 
-        List<WeekBucket> buckets = List.of(
+    private List<WeekBucket> weekBuckets() {
+        return List.of(
                 new WeekBucket("Week of Feb 2",  LocalDate.of(2026, 2, 2),  LocalDate.of(2026, 2, 9)),
                 new WeekBucket("Week of Feb 9",  LocalDate.of(2026, 2, 9),  LocalDate.of(2026, 2, 16)),
                 new WeekBucket("Week of Feb 16", LocalDate.of(2026, 2, 16), LocalDate.of(2026, 2, 23)),
@@ -79,6 +79,28 @@ public class LotService {
                 new WeekBucket("Week of Mar 16", LocalDate.of(2026, 3, 16), LocalDate.of(2026, 3, 23)),
                 new WeekBucket("Week of Mar 23", LocalDate.of(2026, 3, 23), LocalDate.of(2026, 3, 30))
         );
+    }
+
+    public List<Lot> getLotsForStageAndWeek(String stage, String weekLabel) {
+        WeekBucket bucket = weekBuckets().stream()
+                .filter(b -> b.label().equals(weekLabel))
+                .findFirst().orElse(null);
+        if (bucket == null) return List.of();
+
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("MMM d", Locale.ENGLISH);
+        return lotRepository.findAll().stream()
+                .filter(lot -> lot.stage().equals(stage))
+                .filter(lot -> {
+                    try {
+                        LocalDate date = MonthDay.parse(lot.target(), fmt).atYear(2026);
+                        return !date.isBefore(bucket.start()) && date.isBefore(bucket.end());
+                    } catch (Exception e) { return false; }
+                })
+                .toList();
+    }
+
+    public WeeklyTotalsResponse getWeeklyTotals() {
+        List<WeekBucket> buckets = weekBuckets();
 
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("MMM d", Locale.ENGLISH);
         int[][] waferGrid = new int[buckets.size()][STAGES.size()];

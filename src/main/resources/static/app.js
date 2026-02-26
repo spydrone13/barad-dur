@@ -781,6 +781,8 @@ function renderWeeklyTable(data) {
         html += '<td class="wt-cell wt-sub wt-empty">—</td>';
         html += '<td class="wt-cell wt-sub wt-empty">—</td>';
       } else {
+        const stage = data.stages[i];
+        const week  = row.weekLabel;
         // Wafer cell — fire-orange heat-map
         if (w === 0) {
           html += '<td class="wt-cell wt-sub wt-group-start wt-empty">—</td>';
@@ -788,7 +790,7 @@ function renderWeeklyTable(data) {
           const wIntensity = w / data.maxWaferValue;
           const wAlpha = (0.15 + wIntensity * 0.65).toFixed(2);
           const wColor = wIntensity > 0.55 ? '#ffcc00' : '#ff8800';
-          html += `<td class="wt-cell wt-sub wt-group-start wt-hot" style="background:rgba(255,85,0,${wAlpha});color:${wColor};">${w}</td>`;
+          html += `<td class="wt-cell wt-sub wt-group-start wt-hot wt-clickable" onclick="openWtModal('${stage}','${week}')" style="background:rgba(255,85,0,${wAlpha});color:${wColor};">${w}</td>`;
         }
         // Lot cell — steel heat-map
         if (l === 0) {
@@ -796,7 +798,7 @@ function renderWeeklyTable(data) {
         } else {
           const lIntensity = l / data.maxLotValue;
           const lAlpha = (0.15 + lIntensity * 0.65).toFixed(2);
-          html += `<td class="wt-cell wt-sub" style="background:rgba(160,160,160,${lAlpha});color:#c8c8c8;">${l}</td>`;
+          html += `<td class="wt-cell wt-sub wt-clickable" onclick="openWtModal('${stage}','${week}')" style="background:rgba(160,160,160,${lAlpha});color:#c8c8c8;">${l}</td>`;
         }
         // Order cell — dimmer steel
         if (o === 0) {
@@ -804,7 +806,7 @@ function renderWeeklyTable(data) {
         } else {
           const oIntensity = o / data.maxOrderValue;
           const oAlpha = (0.15 + oIntensity * 0.65).toFixed(2);
-          html += `<td class="wt-cell wt-sub" style="background:rgba(100,100,100,${oAlpha});color:#a0a0a0;">${o}</td>`;
+          html += `<td class="wt-cell wt-sub wt-clickable" onclick="openWtModal('${stage}','${week}')" style="background:rgba(100,100,100,${oAlpha});color:#a0a0a0;">${o}</td>`;
         }
       }
     });
@@ -816,6 +818,45 @@ function renderWeeklyTable(data) {
   html += '</tbody></table>';
   document.getElementById('weeklyTableWrap').innerHTML = html;
 }
+
+// ── Weekly Totals modal ───────────────────────────────────────
+function openWtModal(stage, week) {
+    document.getElementById('wtModalTitle').textContent = stageDisplayName(stage) + ' — ' + week;
+    document.getElementById('wtModalBody').innerHTML = '<div class="wt-modal-loading">Loading…</div>';
+    document.getElementById('wtModal').style.display = 'flex';
+
+    fetch('/api/weekly-lots?stage=' + encodeURIComponent(stage) + '&weekLabel=' + encodeURIComponent(week))
+        .then(r => r.json())
+        .then(lots => {
+            if (!lots.length) {
+                document.getElementById('wtModalBody').innerHTML = '<div class="wt-modal-empty">No lots found.</div>';
+                return;
+            }
+            let html = '<table class="wt-modal-table"><thead><tr>' +
+                '<th>Lot</th><th>Product</th><th>Wafers</th><th>Priority</th><th>Status</th><th>Operator</th><th>Order</th>' +
+                '</tr></thead><tbody>';
+            lots.forEach(lot => {
+                html += `<tr>
+                    <td>${lot.id}</td><td>${lot.product}</td><td>${lot.wafers}</td>
+                    <td>${lot.priority}</td><td>${lot.status}</td>
+                    <td>${lot.operator}</td><td>${lot.orderId || '—'}</td>
+                </tr>`;
+            });
+            html += '</tbody></table>';
+            document.getElementById('wtModalBody').innerHTML = html;
+        })
+        .catch(() => {
+            document.getElementById('wtModalBody').innerHTML = '<div class="wt-modal-error">Failed to load lots.</div>';
+        });
+}
+
+function closeWtModal() {
+    document.getElementById('wtModal').style.display = 'none';
+}
+
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeWtModal();
+});
 
 // ── Orders section ────────────────────────────────────────────
 let ordersInit      = false;
