@@ -1561,3 +1561,5 @@ html, body {
 }
 .wt-modal-table tbody tr:last-child td { border-bottom: none; }
 .wt-modal-table tbody tr:hover td { color: var(--steel-bright); background: var(--surface-3); }
+.wt-modal-table tbody td.wt-modal-lot-id { color: var(--fire-bright); font-weight: 600; }
+.wt-modal-table tbody td.wt-modal-wafers { color: var(--steel-bright); font-weight: 600; }

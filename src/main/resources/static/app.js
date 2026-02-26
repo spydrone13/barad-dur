@@ -836,10 +836,21 @@ function openWtModal(stage, week) {
                 '<th>Lot</th><th>Product</th><th>Wafers</th><th>Priority</th><th>Status</th><th>Operator</th><th>Order</th>' +
                 '</tr></thead><tbody>';
             lots.forEach(lot => {
+                const statusClass = lot.status === 'on-track' ? 'badge-on-track'
+                                  : lot.status === 'delayed'  ? 'badge-delayed'
+                                  : 'badge-hold';
+                const statusLabel = lot.status === 'on-track' ? 'On Track'
+                                  : lot.status === 'delayed'  ? 'Delayed'
+                                  : 'On Hold';
+                const priorityClass = `badge-priority-${lot.priority}`;
                 html += `<tr>
-                    <td>${lot.id}</td><td>${lot.product}</td><td>${lot.wafers}</td>
-                    <td>${lot.priority}</td><td>${lot.status}</td>
-                    <td>${lot.operator}</td><td>${lot.orderId || '—'}</td>
+                    <td class="wt-modal-lot-id">${lot.id}</td>
+                    <td>${lot.product}</td>
+                    <td class="wt-modal-wafers">${lot.wafers}</td>
+                    <td><span class="badge ${priorityClass}">${lot.priority}</span></td>
+                    <td><span class="badge ${statusClass}"><span class="badge-dot"></span>${statusLabel}</span></td>
+                    <td>${lot.operator}</td>
+                    <td>${lot.orderId || '—'}</td>
                 </tr>`;
             });
             html += '</tbody></table>';
