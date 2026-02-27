@@ -1,11 +1,8 @@
 package com.spydrone.baraddur.repository;
 
 import com.spydrone.baraddur.model.LotStageEvent;
-import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
-@Repository
 public class InMemoryStageEventRepository implements StageEventRepository {
 
     @Override

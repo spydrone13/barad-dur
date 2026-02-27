@@ -1,15 +1,12 @@
 package com.spydrone.baraddur.repository;
 
 import com.spydrone.baraddur.model.Lot;
-import org.springframework.stereotype.Repository;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-@Repository
 public class InMemoryLotRepository implements LotRepository {
 
     private final ConcurrentHashMap<String, Lot> lots;

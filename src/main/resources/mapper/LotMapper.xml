@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spydrone.baraddur.repository.LotMapper">
+
+    <resultMap id="lotResultMap" type="com.spydrone.baraddur.model.Lot">
+        <constructor>
+            <idArg column="id"       javaType="String"/>
+            <arg   column="product"  javaType="String"/>
+            <arg   column="wafers"   javaType="int"/>
+            <arg   column="stage"    javaType="String"/>
+            <arg   column="priority" javaType="String"/>
+            <arg   column="status"   javaType="String"/>
+            <arg   column="operator" javaType="String"/>
+            <arg   column="target"   javaType="String"/>
+            <arg   column="order_id" javaType="String"/>
+        </constructor>
+    </resultMap>
+
+    <select id="findAll" resultMap="lotResultMap">
+        SELECT * FROM lots
+    </select>
+
+    <select id="findByStatus" resultMap="lotResultMap">
+        SELECT * FROM lots WHERE status = #{status}
+    </select>
+
+    <select id="findById" resultMap="lotResultMap">
+        SELECT * FROM lots WHERE id = #{id}
+    </select>
+
+    <insert id="save">
+        MERGE INTO lots (id, product, wafers, stage, priority, status, operator, target, order_id)
+        VALUES (#{id}, #{product}, #{wafers}, #{stage}, #{priority}, #{status}, #{operator}, #{target}, #{orderId})
+    </insert>
+
+</mapper>

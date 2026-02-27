@@ -6,7 +6,15 @@
       "Bash(cd /c/Users/packe/workspace/barad-dur && ./mvnw.cmd clean package -q 2>&1)",
       "Bash(cd \"C:/Users/packe/workspace/barad-dur\" && cmd /c \"mvnw.cmd clean package -q\" 2>&1)",
       "Bash(cd:*)",
-      "Bash(dir C:\\\\Users\\\\packe\\\\workspace\\\\barad-dur:*)"
+      "Bash(dir C:\\\\Users\\\\packe\\\\workspace\\\\barad-dur:*)",
+      "Bash(cd C:/Users/packe/workspace/barad-dur && ./mvnw.cmd clean package -q 2>&1)",
+      "Bash(cd C:/Users/packe/workspace/barad-dur && cmd /c \"mvnw.cmd clean package -q\" 2>&1)",
+      "Bash(tail:*)",
+      "Bash(cmd.exe:*)",
+      "Bash(cd \"C:\\\\Users\\\\packe\\\\workspace\\\\barad-dur\" && ./mvnw.cmd clean package 2>&1)",
+      "Bash(cd /c/Users/packe/workspace/barad-dur && ./mvnw.cmd clean package 2>&1)",
+      "Bash(./mvnw.cmd clean:*)",
+      "Bash(cmd:*)"
     ]
   }
 }
