@@ -3,17 +3,20 @@ package com.spydrone.baraddur.repository;
 import com.spydrone.baraddur.model.Lot;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Repository
 public class InMemoryLotRepository implements LotRepository {
 
-    private final List<Lot> lots;
+    private final ConcurrentHashMap<String, Lot> lots;
 
     public InMemoryLotRepository() {
-        lots = List.of(
+        lots = new ConcurrentHashMap<>();
+        List.of(
                 // Feb 2–8: PACKAGING / FINAL TEST / SHIP, on-track
                 new Lot("BD-26-0731", "BD-12 Mixed-Signal", 100, "SHIP",       "high",   "on-track", "E. Arwen",      "Feb 3",  "ORD-26-005"),
                 new Lot("BD-26-0737", "BD-14 Analog",        50, "FINAL TEST", "normal", "on-track", "G. Grey",       "Feb 5",  "ORD-26-006"),
@@ -73,25 +76,28 @@ public class InMemoryLotRepository implements LotRepository {
                 new Lot("BD-26-0924", "BD-5 SRAM",           50, "WAFER START","low",    "on-track", "N. Shadow",     "Mar 24", "ORD-26-002"),
                 new Lot("BD-26-0930", "BD-14 Analog",       100, "WAFER START","low",    "on-track", "O. Fangorn",    "Mar 26", "ORD-26-006"),
                 new Lot("BD-26-0936", "BD-3 Power",          75, "WAFER START","low",    "on-track", "F. Baggins",    "Mar 28", "ORD-26-004")
-        );
+        ).forEach(lot -> lots.put(lot.id(), lot));
     }
 
     @Override
     public List<Lot> findAll() {
-        return lots;
+        return new ArrayList<>(lots.values());
     }
 
     @Override
     public List<Lot> findByStatus(String status) {
-        return lots.stream()
+        return lots.values().stream()
                 .filter(lot -> status.equals(lot.status()))
                 .collect(Collectors.toList());
     }
 
     @Override
     public Optional<Lot> findById(String id) {
-        return lots.stream()
-                .filter(lot -> id.equals(lot.id()))
-                .findFirst();
+        return Optional.ofNullable(lots.get(id));
+    }
+
+    @Override
+    public void save(Lot lot) {
+        lots.put(lot.id(), lot);
     }
 }

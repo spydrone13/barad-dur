@@ -9,4 +9,5 @@ public interface LotRepository {
     List<Lot> findAll();
     List<Lot> findByStatus(String status);
     Optional<Lot> findById(String id);
+    void save(Lot lot);
 }
