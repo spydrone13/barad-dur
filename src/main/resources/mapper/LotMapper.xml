@@ -8,7 +8,7 @@
         <constructor>
             <idArg column="id"       javaType="String"/>
             <arg   column="product"  javaType="String"/>
-            <arg   column="wafers"   javaType="int"/>
+            <arg   column="wafers"   javaType="_int"/>
             <arg   column="stage"    javaType="String"/>
             <arg   column="priority" javaType="String"/>
             <arg   column="status"   javaType="String"/>
