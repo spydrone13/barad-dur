@@ -32,10 +32,10 @@ public class LotController {
     public LotSummaryResponse getSummary() {
         List<Lot> all = lotRepository.findAll();
         int totalLots = all.size();
-        int activeLots = (int) all.stream().filter(l -> "on-track".equals(l.status())).count();
-        int onHold     = (int) all.stream().filter(l -> "hold".equals(l.status())).count();
-        int delayed    = (int) all.stream().filter(l -> "delayed".equals(l.status())).count();
-        int totalWafers = all.stream().mapToInt(Lot::wafers).sum();
+        int activeLots = (int) all.stream().filter(l -> "on-track".equals(l.getStatus())).count();
+        int onHold     = (int) all.stream().filter(l -> "hold".equals(l.getStatus())).count();
+        int delayed    = (int) all.stream().filter(l -> "delayed".equals(l.getStatus())).count();
+        int totalWafers = all.stream().mapToInt(Lot::getWafers).sum();
         return new LotSummaryResponse(totalLots, activeLots, onHold, delayed, totalWafers);
     }
 }

@@ -1,6 +1,5 @@
 package com.spydrone.baraddur.service;
 
-import com.spydrone.baraddur.model.Lot;
 import com.spydrone.baraddur.repository.LotRepository;
 import com.spydrone.baraddur.repository.StageEventRepository;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -21,18 +20,8 @@ public class LotStageEventProcessor {
     public void processEvents() {
         stageEventRepository.findUnprocessed().forEach(event ->
             lotRepository.findById(event.lotId()).ifPresent(lot -> {
-                Lot updatedLot = new Lot(
-                        lot.id(),
-                        lot.product(),
-                        lot.wafers(),
-                        event.newStage(),
-                        lot.priority(),
-                        lot.status(),
-                        lot.operator(),
-                        lot.target(),
-                        lot.orderId()
-                );
-                lotRepository.save(updatedLot);
+                lot.moveToStage(event.newStage());
+                lotRepository.save(lot);
                 stageEventRepository.markProcessed(event.eventId());
             })
         );

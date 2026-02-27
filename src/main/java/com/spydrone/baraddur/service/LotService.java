@@ -57,12 +57,12 @@ public class LotService {
 
     private List<Lot> getLotsByOrder(String orderId) {
         return lotRepository.findAll().stream()
-                .filter(l -> orderId.equals(l.orderId()))
+                .filter(l -> orderId.equals(l.getOrderId()))
                 .toList();
     }
 
     private OrderResponse buildOrderResponse(Order order, List<Lot> lots) {
-        int totalWafers = lots.stream().mapToInt(Lot::wafers).sum();
+        int totalWafers = lots.stream().mapToInt(Lot::getWafers).sum();
         return new OrderResponse(order, lots, lots.size(), totalWafers);
     }
 
@@ -89,10 +89,10 @@ public class LotService {
 
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("MMM d", Locale.ENGLISH);
         return lotRepository.findAll().stream()
-                .filter(lot -> lot.stage().equals(stage))
+                .filter(lot -> lot.getStage().equals(stage))
                 .filter(lot -> {
                     try {
-                        LocalDate date = MonthDay.parse(lot.target(), fmt).atYear(2026);
+                        LocalDate date = MonthDay.parse(lot.getTarget(), fmt).atYear(2026);
                         return !date.isBefore(bucket.start()) && date.isBefore(bucket.end());
                     } catch (Exception e) { return false; }
                 })
@@ -112,7 +112,7 @@ public class LotService {
                 orderSets[wi][si] = new HashSet<>();
 
         for (Lot lot : lotRepository.findAll()) {
-            MonthDay md = MonthDay.parse(lot.target(), fmt);
+            MonthDay md = MonthDay.parse(lot.getTarget(), fmt);
             LocalDate date = md.atYear(2026);
             int wi = -1;
             for (int i = 0; i < buckets.size(); i++) {
@@ -122,11 +122,11 @@ public class LotService {
                     break;
                 }
             }
-            int si = STAGES.indexOf(lot.stage());
+            int si = STAGES.indexOf(lot.getStage());
             if (wi >= 0 && si >= 0) {
-                waferGrid[wi][si] += lot.wafers();
+                waferGrid[wi][si] += lot.getWafers();
                 lotGrid[wi][si]   += 1;
-                if (lot.orderId() != null) orderSets[wi][si].add(lot.orderId());
+                if (lot.getOrderId() != null) orderSets[wi][si].add(lot.getOrderId());
             }
         }
 

@@ -76,7 +76,7 @@ public class InMemoryLotRepository implements LotRepository {
                 new Lot("BD-26-0924", "BD-5 SRAM",           50, "WAFER START","low",    "on-track", "N. Shadow",     "Mar 24", "ORD-26-002"),
                 new Lot("BD-26-0930", "BD-14 Analog",       100, "WAFER START","low",    "on-track", "O. Fangorn",    "Mar 26", "ORD-26-006"),
                 new Lot("BD-26-0936", "BD-3 Power",          75, "WAFER START","low",    "on-track", "F. Baggins",    "Mar 28", "ORD-26-004")
-        ).forEach(lot -> lots.put(lot.id(), lot));
+        ).forEach(lot -> lots.put(lot.getId(), lot));
     }
 
     @Override
@@ -87,7 +87,7 @@ public class InMemoryLotRepository implements LotRepository {
     @Override
     public List<Lot> findByStatus(String status) {
         return lots.values().stream()
-                .filter(lot -> status.equals(lot.status()))
+                .filter(lot -> status.equals(lot.getStatus()))
                 .collect(Collectors.toList());
     }
 
@@ -98,6 +98,6 @@ public class InMemoryLotRepository implements LotRepository {
 
     @Override
     public void save(Lot lot) {
-        lots.put(lot.id(), lot);
+        lots.put(lot.getId(), lot);
     }
 }
