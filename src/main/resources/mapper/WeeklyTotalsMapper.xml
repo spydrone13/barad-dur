@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spydrone.baraddur.repository.WeeklyTotalsMapper">
+
+    <resultMap id="weeklyTotalRowResultMap" type="com.spydrone.baraddur.dto.WeeklyTotalRow">
+        <constructor>
+            <arg column="week_label"  javaType="String"/>
+            <arg column="stage"       javaType="String"/>
+            <arg column="wafer_count" javaType="_int"/>
+            <arg column="lot_count"   javaType="_int"/>
+            <arg column="order_count" javaType="_int"/>
+        </constructor>
+    </resultMap>
+
+    <select id="findAll" resultMap="weeklyTotalRowResultMap">
+        SELECT * FROM weekly_totals ORDER BY week_label, stage
+    </select>
+
+    <insert id="upsertCell">
+        MERGE INTO weekly_totals (week_label, stage, wafer_count, lot_count, order_count)
+        VALUES (#{weekLabel}, #{stage}, #{waferCount}, #{lotCount}, #{orderCount})
+    </insert>
+
+</mapper>

@@ -14,10 +14,14 @@ public class LotStageEventProcessor {
 
     private final StageEventRepository stageEventRepository;
     private final LotRepository lotRepository;
+    private final WeeklyProjectionService weeklyProjectionService;
 
-    public LotStageEventProcessor(StageEventRepository stageEventRepository, LotRepository lotRepository) {
+    public LotStageEventProcessor(StageEventRepository stageEventRepository,
+                                   LotRepository lotRepository,
+                                   WeeklyProjectionService weeklyProjectionService) {
         this.stageEventRepository = stageEventRepository;
         this.lotRepository = lotRepository;
+        this.weeklyProjectionService = weeklyProjectionService;
     }
 
     @Scheduled(fixedDelay = 5000)
@@ -25,11 +29,13 @@ public class LotStageEventProcessor {
         log.info("Processing events...");
         stageEventRepository.findUnprocessed().forEach(event ->
             lotRepository.findById(event.lotId()).ifPresentOrElse(lot -> {
-                log.info("Moving lot {} from stage '{}' to '{}'", lot.getId(), lot.getStage(), event.newStage());
+                String oldStage = lot.getStage();
+                log.info("Moving lot {} from stage '{}' to '{}'", lot.getId(), oldStage, event.newStage());
                 lot.moveToStage(event.newStage());
                 lotRepository.save(lot);
                 stageEventRepository.markProcessed(event.eventId());
                 log.debug("Event {} processed", event.eventId());
+                weeklyProjectionService.onLotMoved(lot, oldStage);
             }, () -> log.warn("Event {} references unknown lot {}", event.eventId(), event.lotId()))
         );
     }

@@ -16,3 +16,12 @@ CREATE TABLE lot_stage_events (
     new_stage  VARCHAR(20)  NOT NULL,
     processed  BOOLEAN      NOT NULL DEFAULT FALSE
 );
+
+CREATE TABLE weekly_totals (
+    week_label   VARCHAR(20) NOT NULL,
+    stage        VARCHAR(20) NOT NULL,
+    wafer_count  INT         NOT NULL DEFAULT 0,
+    lot_count    INT         NOT NULL DEFAULT 0,
+    order_count  INT         NOT NULL DEFAULT 0,
+    PRIMARY KEY (week_label, stage)
+);

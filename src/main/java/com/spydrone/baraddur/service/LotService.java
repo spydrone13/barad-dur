@@ -1,22 +1,14 @@
 package com.spydrone.baraddur.service;
 
 import com.spydrone.baraddur.dto.OrderResponse;
-import com.spydrone.baraddur.dto.WeeklyRow;
 import com.spydrone.baraddur.dto.WeeklyTotalsResponse;
 import com.spydrone.baraddur.model.Lot;
 import com.spydrone.baraddur.model.Order;
 import com.spydrone.baraddur.repository.LotRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.MonthDay;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class LotService {
@@ -30,16 +22,12 @@ public class LotService {
             new Order("ORD-26-006", "Lothlórien Devices", "BD-14 Analog",       "Jan 25","Mar 28", "in-progress", "low")
     );
 
-    private static final List<String> STAGES = List.of(
-            "WAFER START", "OXIDATION", "LITHO", "ETCH", "IMPLANT",
-            "DIFFUSION", "CVD", "CMP", "METAL", "PASSIVATION",
-            "PROBE", "DICING", "PACKAGING", "FINAL TEST", "SHIP"
-    );
-
     private final LotRepository lotRepository;
+    private final WeeklyProjectionService weeklyProjectionService;
 
-    public LotService(LotRepository lotRepository) {
+    public LotService(LotRepository lotRepository, WeeklyProjectionService weeklyProjectionService) {
         this.lotRepository = lotRepository;
+        this.weeklyProjectionService = weeklyProjectionService;
     }
 
     public List<OrderResponse> getOrders() {
@@ -66,92 +54,11 @@ public class LotService {
         return new OrderResponse(order, lots, lots.size(), totalWafers);
     }
 
-    private record WeekBucket(String label, LocalDate start, LocalDate end) {}
-
-    private List<WeekBucket> weekBuckets() {
-        return List.of(
-                new WeekBucket("Week of Feb 2",  LocalDate.of(2026, 2, 2),  LocalDate.of(2026, 2, 9)),
-                new WeekBucket("Week of Feb 9",  LocalDate.of(2026, 2, 9),  LocalDate.of(2026, 2, 16)),
-                new WeekBucket("Week of Feb 16", LocalDate.of(2026, 2, 16), LocalDate.of(2026, 2, 23)),
-                new WeekBucket("Week of Feb 23", LocalDate.of(2026, 2, 23), LocalDate.of(2026, 3, 2)),
-                new WeekBucket("Week of Mar 2",  LocalDate.of(2026, 3, 2),  LocalDate.of(2026, 3, 9)),
-                new WeekBucket("Week of Mar 9",  LocalDate.of(2026, 3, 9),  LocalDate.of(2026, 3, 16)),
-                new WeekBucket("Week of Mar 16", LocalDate.of(2026, 3, 16), LocalDate.of(2026, 3, 23)),
-                new WeekBucket("Week of Mar 23", LocalDate.of(2026, 3, 23), LocalDate.of(2026, 3, 30))
-        );
+    public WeeklyTotalsResponse getWeeklyTotals() {
+        return weeklyProjectionService.getWeeklyTotals();
     }
 
     public List<Lot> getLotsForStageAndWeek(String stage, String weekLabel) {
-        WeekBucket bucket = weekBuckets().stream()
-                .filter(b -> b.label().equals(weekLabel))
-                .findFirst().orElse(null);
-        if (bucket == null) return List.of();
-
-        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("MMM d", Locale.ENGLISH);
-        return lotRepository.findAll().stream()
-                .filter(lot -> lot.getStage().equals(stage))
-                .filter(lot -> {
-                    try {
-                        LocalDate date = MonthDay.parse(lot.getTarget(), fmt).atYear(2026);
-                        return !date.isBefore(bucket.start()) && date.isBefore(bucket.end());
-                    } catch (Exception e) { return false; }
-                })
-                .toList();
-    }
-
-    public WeeklyTotalsResponse getWeeklyTotals() {
-        List<WeekBucket> buckets = weekBuckets();
-
-        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("MMM d", Locale.ENGLISH);
-        int[][] waferGrid = new int[buckets.size()][STAGES.size()];
-        int[][] lotGrid   = new int[buckets.size()][STAGES.size()];
-        @SuppressWarnings("unchecked")
-        Set<String>[][] orderSets = new HashSet[buckets.size()][STAGES.size()];
-        for (int wi = 0; wi < buckets.size(); wi++)
-            for (int si = 0; si < STAGES.size(); si++)
-                orderSets[wi][si] = new HashSet<>();
-
-        for (Lot lot : lotRepository.findAll()) {
-            MonthDay md = MonthDay.parse(lot.getTarget(), fmt);
-            LocalDate date = md.atYear(2026);
-            int wi = -1;
-            for (int i = 0; i < buckets.size(); i++) {
-                WeekBucket b = buckets.get(i);
-                if (!date.isBefore(b.start()) && date.isBefore(b.end())) {
-                    wi = i;
-                    break;
-                }
-            }
-            int si = STAGES.indexOf(lot.getStage());
-            if (wi >= 0 && si >= 0) {
-                waferGrid[wi][si] += lot.getWafers();
-                lotGrid[wi][si]   += 1;
-                if (lot.getOrderId() != null) orderSets[wi][si].add(lot.getOrderId());
-            }
-        }
-
-        int maxWaferValue = 1, maxLotValue = 1, maxOrderValue = 1;
-        List<WeeklyRow> rows = new ArrayList<>();
-        for (int wi = 0; wi < buckets.size(); wi++) {
-            List<Integer> waferCells = new ArrayList<>();
-            List<Integer> lotCells   = new ArrayList<>();
-            List<Integer> orderCells = new ArrayList<>();
-            int rowTotal = 0;
-            for (int si = 0; si < STAGES.size(); si++) {
-                int w = waferGrid[wi][si];
-                int l = lotGrid[wi][si];
-                int o = orderSets[wi][si].size();
-                waferCells.add(w);
-                lotCells.add(l);
-                orderCells.add(o);
-                rowTotal += w;
-                if (w > maxWaferValue) maxWaferValue = w;
-                if (l > maxLotValue)   maxLotValue   = l;
-                if (o > maxOrderValue) maxOrderValue  = o;
-            }
-            rows.add(new WeeklyRow(buckets.get(wi).label(), waferCells, lotCells, orderCells, rowTotal));
-        }
-
-        return new WeeklyTotalsResponse(STAGES, rows, maxWaferValue, maxLotValue, maxOrderValue);
+        return weeklyProjectionService.getLotsForStageAndWeek(stage, weekLabel);
     }
 }
