@@ -98,36 +98,46 @@ public class WeeklyProjectionService {
 
     public void onLotMoved(Lot lot, String oldStage) {
         String weekLabel = getWeekLabel(lot.getTarget());
-        if (weekLabel != null) {
-            upsertCellFromLots(weekLabel, oldStage);
-            upsertCellFromLots(weekLabel, lot.getStage());
-        }
-    }
+        if (weekLabel == null) return;
 
-    private void upsertCellFromLots(String weekLabel, String stage) {
         WeekBucket bucket = weekBuckets().stream()
                 .filter(b -> b.label().equals(weekLabel))
-                .findFirst().orElse(null);
-        if (bucket == null) return;
-
+                .findFirst().orElseThrow();
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("MMM d", Locale.ENGLISH);
-        int waferCount = 0;
-        int lotCount = 0;
-        Set<String> orderIds = new HashSet<>();
+        String orderId = lot.getOrderId();
 
-        for (Lot lot : lotRepository.findAll()) {
-            if (!lot.getStage().equals(stage)) continue;
-            try {
-                LocalDate date = MonthDay.parse(lot.getTarget(), fmt).atYear(2026);
-                if (!date.isBefore(bucket.start()) && date.isBefore(bucket.end())) {
-                    waferCount += lot.getWafers();
-                    lotCount += 1;
-                    if (lot.getOrderId() != null) orderIds.add(lot.getOrderId());
-                }
-            } catch (Exception ignored) {}
+        // lot is already saved with new stage in DB at this point
+
+        // Old cell: orderId is no longer here if no remaining lot in that (weekLabel, oldStage) shares it
+        int oldOrderDelta = 0;
+        if (orderId != null) {
+            boolean orderStillInOldCell = lotRepository.findByStage(oldStage).stream()
+                    .filter(l -> orderId.equals(l.getOrderId()))
+                    .anyMatch(l -> inBucket(l.getTarget(), bucket, fmt));
+            if (!orderStillInOldCell) oldOrderDelta = -1;
         }
 
-        weeklyTotalsMapper.upsertCell(weekLabel, stage, waferCount, lotCount, orderIds.size());
+        // New cell: orderId is newly here if this is the only lot in (weekLabel, newStage) with it
+        int newOrderDelta = 0;
+        if (orderId != null) {
+            long countInNewCell = lotRepository.findByStage(lot.getStage()).stream()
+                    .filter(l -> orderId.equals(l.getOrderId()))
+                    .filter(l -> inBucket(l.getTarget(), bucket, fmt))
+                    .count();
+            if (countInNewCell == 1) newOrderDelta = 1;
+        }
+
+        weeklyTotalsMapper.adjustCell(weekLabel, oldStage,        -lot.getWafers(), -1, oldOrderDelta);
+        weeklyTotalsMapper.adjustCell(weekLabel, lot.getStage(),  +lot.getWafers(), +1, newOrderDelta);
+    }
+
+    private boolean inBucket(String target, WeekBucket bucket, DateTimeFormatter fmt) {
+        try {
+            LocalDate date = MonthDay.parse(target, fmt).atYear(2026);
+            return !date.isBefore(bucket.start()) && date.isBefore(bucket.end());
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public WeeklyTotalsResponse getWeeklyTotals() {
@@ -176,14 +186,8 @@ public class WeeklyProjectionService {
         if (bucket == null) return List.of();
 
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("MMM d", Locale.ENGLISH);
-        return lotRepository.findAll().stream()
-                .filter(lot -> lot.getStage().equals(stage))
-                .filter(lot -> {
-                    try {
-                        LocalDate date = MonthDay.parse(lot.getTarget(), fmt).atYear(2026);
-                        return !date.isBefore(bucket.start()) && date.isBefore(bucket.end());
-                    } catch (Exception e) { return false; }
-                })
+        return lotRepository.findByStage(stage).stream()
+                .filter(lot -> inBucket(lot.getTarget(), bucket, fmt))
                 .toList();
     }
 

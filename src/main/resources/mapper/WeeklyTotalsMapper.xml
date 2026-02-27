@@ -23,4 +23,17 @@
         VALUES (#{weekLabel}, #{stage}, #{waferCount}, #{lotCount}, #{orderCount})
     </insert>
 
+    <update id="adjustCell">
+        MERGE INTO weekly_totals AS t
+        USING (VALUES (#{weekLabel}, #{stage}, #{waferDelta}, #{lotDelta}, #{orderDelta}))
+              AS s(wl, st, wd, ld, od)
+        ON (t.week_label = s.wl AND t.stage = s.st)
+        WHEN MATCHED THEN
+            UPDATE SET t.wafer_count  = t.wafer_count  + s.wd,
+                       t.lot_count    = t.lot_count    + s.ld,
+                       t.order_count  = t.order_count  + s.od
+        WHEN NOT MATCHED THEN
+            INSERT VALUES (s.wl, s.st, s.wd, s.ld, s.od)
+    </update>
+
 </mapper>

@@ -22,6 +22,10 @@
         SELECT * FROM lots
     </select>
 
+    <select id="findByStage" resultMap="lotResultMap">
+        SELECT * FROM lots WHERE stage = #{stage}
+    </select>
+
     <select id="findByStatus" resultMap="lotResultMap">
         SELECT * FROM lots WHERE status = #{status}
     </select>

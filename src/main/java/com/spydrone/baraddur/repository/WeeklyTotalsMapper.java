@@ -14,4 +14,9 @@ public interface WeeklyTotalsMapper {
                     @Param("waferCount") int waferCount,
                     @Param("lotCount")   int lotCount,
                     @Param("orderCount") int orderCount);
+    void adjustCell(@Param("weekLabel")   String weekLabel,
+                    @Param("stage")       String stage,
+                    @Param("waferDelta")  int waferDelta,
+                    @Param("lotDelta")    int lotDelta,
+                    @Param("orderDelta")  int orderDelta);
 }

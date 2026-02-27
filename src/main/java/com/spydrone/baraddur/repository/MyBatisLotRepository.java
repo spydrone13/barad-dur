@@ -21,6 +21,11 @@ public class MyBatisLotRepository implements LotRepository {
     }
 
     @Override
+    public List<Lot> findByStage(String stage) {
+        return lotMapper.findByStage(stage);
+    }
+
+    @Override
     public List<Lot> findByStatus(String status) {
         return lotMapper.findByStatus(status);
     }
