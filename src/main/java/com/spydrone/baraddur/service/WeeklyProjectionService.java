@@ -11,6 +11,7 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.MonthDay;
 import java.time.format.DateTimeFormatter;
@@ -25,7 +26,7 @@ import java.util.Set;
 @Service
 public class WeeklyProjectionService {
 
-    static final int WAFER_THRESHOLD = 100;
+    static final int WAFERS_PER_DAY = 25;
 
     static final List<String> STAGES = List.of(
             "WAFER START", "OXIDATION", "LITHO", "ETCH", "IMPLANT",
@@ -152,9 +153,11 @@ public class WeeklyProjectionService {
 
         List<WeeklyRow> weeklyRows = new ArrayList<>();
 
+        LocalDate today = LocalDate.now();
         for (WeekBucket bucket : buckets) {
             List<WeeklyCell> cells = new ArrayList<>();
             int rowTotal = 0;
+            int threshold = WAFERS_PER_DAY * remainingWorkDays(today, bucket.start(), bucket.end());
 
             for (String stage : STAGES) {
                 WeeklyTotalRow cell = index.get(bucket.label() + "|" + stage);
@@ -162,14 +165,26 @@ public class WeeklyProjectionService {
                 int l = cell != null ? cell.lotCount()   : 0;
                 int o = cell != null ? cell.orderCount() : 0;
                 rowTotal += w;
-                cells.add(new WeeklyCell(w, l, o, WAFER_THRESHOLD));
+                cells.add(new WeeklyCell(w, l, o, threshold));
             }
 
-            boolean isPrior = !bucket.end().isAfter(LocalDate.now());
+            boolean isPrior = !bucket.end().isAfter(today);
             weeklyRows.add(new WeeklyRow(bucket.label(), cells, rowTotal, isPrior));
         }
 
         return new WeeklyTotalsResponse(STAGES, weeklyRows);
+    }
+
+    private static int remainingWorkDays(LocalDate today, LocalDate bucketStart, LocalDate bucketEnd) {
+        LocalDate from = today.isAfter(bucketStart) ? today : bucketStart;
+        int count = 0;
+        for (LocalDate d = from; d.isBefore(bucketEnd); d = d.plusDays(1)) {
+            DayOfWeek dow = d.getDayOfWeek();
+            if (dow != DayOfWeek.SATURDAY && dow != DayOfWeek.SUNDAY) {
+                count++;
+            }
+        }
+        return count;
     }
 
     public List<Lot> getLotsForStageAndWeek(String stage, String weekLabel) {

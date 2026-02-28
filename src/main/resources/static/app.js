@@ -786,8 +786,8 @@ function renderWeeklyTable(data) {
         let bg, fg;
         if (row.isPrior) {
           bg = 'rgba(204,34,0,0.22)';   fg = '#ff4444';
-        } else if (w >= threshold) {
-          bg = 'rgba(160,160,160,0.18)'; fg = '#a0a0a0';
+        } else if (w > threshold) {
+          bg = 'rgba(204,170,0,0.22)';   fg = '#ffcc00';
         } else {
           bg = 'rgba(34,204,102,0.18)';  fg = '#22cc66';
         }
