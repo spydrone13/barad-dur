@@ -7,5 +7,6 @@ public record WeeklyRow(
     List<Integer> waferCells,
     List<Integer> lotCells,
     List<Integer> orderCells,
-    int rowTotal
+    int rowTotal,
+    boolean isPrior
 ) {}

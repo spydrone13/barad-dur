@@ -170,7 +170,8 @@ public class WeeklyProjectionService {
                 if (o > maxOrderValue) maxOrderValue = o;
             }
 
-            weeklyRows.add(new WeeklyRow(bucket.label(), waferCells, lotCells, orderCells, rowTotal));
+            boolean isPrior = !bucket.end().isAfter(LocalDate.now());
+            weeklyRows.add(new WeeklyRow(bucket.label(), waferCells, lotCells, orderCells, rowTotal, isPrior));
         }
 
         return new WeeklyTotalsResponse(STAGES, weeklyRows, maxWaferValue, maxLotValue, maxOrderValue);

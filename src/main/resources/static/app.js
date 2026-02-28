@@ -783,31 +783,26 @@ function renderWeeklyTable(data) {
       } else {
         const stage = data.stages[i];
         const week  = row.weekLabel;
-        // Wafer cell — fire-orange heat-map
-        if (w === 0) {
-          html += '<td class="wt-cell wt-sub wt-group-start wt-empty">—</td>';
+
+        let bg, fg;
+        if (row.isPrior) {
+          bg = 'rgba(204,34,0,0.22)';   fg = '#ff4444';
+        } else if (w >= 100) {
+          bg = 'rgba(160,160,160,0.18)'; fg = '#a0a0a0';
         } else {
-          const wIntensity = w / data.maxWaferValue;
-          const wAlpha = (0.15 + wIntensity * 0.65).toFixed(2);
-          const wColor = wIntensity > 0.55 ? '#ffcc00' : '#ff8800';
-          html += `<td class="wt-cell wt-sub wt-group-start wt-hot wt-clickable" onclick="openWtModal('${stage}','${week}')" style="background:rgba(255,85,0,${wAlpha});color:${wColor};">${w}</td>`;
+          bg = 'rgba(34,204,102,0.18)';  fg = '#22cc66';
         }
-        // Lot cell — steel heat-map
-        if (l === 0) {
-          html += '<td class="wt-cell wt-sub wt-empty">—</td>';
-        } else {
-          const lIntensity = l / data.maxLotValue;
-          const lAlpha = (0.15 + lIntensity * 0.65).toFixed(2);
-          html += `<td class="wt-cell wt-sub wt-clickable" onclick="openWtModal('${stage}','${week}')" style="background:rgba(160,160,160,${lAlpha});color:#c8c8c8;">${l}</td>`;
-        }
-        // Order cell — dimmer steel
-        if (o === 0) {
-          html += '<td class="wt-cell wt-sub wt-empty">—</td>';
-        } else {
-          const oIntensity = o / data.maxOrderValue;
-          const oAlpha = (0.15 + oIntensity * 0.65).toFixed(2);
-          html += `<td class="wt-cell wt-sub wt-clickable" onclick="openWtModal('${stage}','${week}')" style="background:rgba(100,100,100,${oAlpha});color:#a0a0a0;">${o}</td>`;
-        }
+        const s = `background:${bg};color:${fg};`;
+
+        html += w === 0
+          ? '<td class="wt-cell wt-sub wt-group-start wt-empty">—</td>'
+          : `<td class="wt-cell wt-sub wt-group-start wt-clickable" onclick="openWtModal('${stage}','${week}')" style="${s}">${w}</td>`;
+        html += l === 0
+          ? '<td class="wt-cell wt-sub wt-empty">—</td>'
+          : `<td class="wt-cell wt-sub wt-clickable" onclick="openWtModal('${stage}','${week}')" style="${s}">${l}</td>`;
+        html += o === 0
+          ? '<td class="wt-cell wt-sub wt-empty">—</td>'
+          : `<td class="wt-cell wt-sub wt-clickable" onclick="openWtModal('${stage}','${week}')" style="${s}">${o}</td>`;
       }
     });
 
