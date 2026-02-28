@@ -1,5 +1,6 @@
 package com.spydrone.baraddur.service;
 
+import com.spydrone.baraddur.dto.WeeklyCell;
 import com.spydrone.baraddur.dto.WeeklyRow;
 import com.spydrone.baraddur.dto.WeeklyTotalRow;
 import com.spydrone.baraddur.dto.WeeklyTotalsResponse;
@@ -23,6 +24,8 @@ import java.util.Set;
 
 @Service
 public class WeeklyProjectionService {
+
+    static final int WAFER_THRESHOLD = 100;
 
     static final List<String> STAGES = List.of(
             "WAFER START", "OXIDATION", "LITHO", "ETCH", "IMPLANT",
@@ -147,13 +150,10 @@ public class WeeklyProjectionService {
             index.put(row.weekLabel() + "|" + row.stage(), row);
         }
 
-        int maxWaferValue = 1, maxLotValue = 1, maxOrderValue = 1;
         List<WeeklyRow> weeklyRows = new ArrayList<>();
 
         for (WeekBucket bucket : buckets) {
-            List<Integer> waferCells = new ArrayList<>();
-            List<Integer> lotCells = new ArrayList<>();
-            List<Integer> orderCells = new ArrayList<>();
+            List<WeeklyCell> cells = new ArrayList<>();
             int rowTotal = 0;
 
             for (String stage : STAGES) {
@@ -161,20 +161,15 @@ public class WeeklyProjectionService {
                 int w = cell != null ? cell.waferCount() : 0;
                 int l = cell != null ? cell.lotCount()   : 0;
                 int o = cell != null ? cell.orderCount() : 0;
-                waferCells.add(w);
-                lotCells.add(l);
-                orderCells.add(o);
                 rowTotal += w;
-                if (w > maxWaferValue) maxWaferValue = w;
-                if (l > maxLotValue)   maxLotValue   = l;
-                if (o > maxOrderValue) maxOrderValue = o;
+                cells.add(new WeeklyCell(w, l, o, WAFER_THRESHOLD));
             }
 
             boolean isPrior = !bucket.end().isAfter(LocalDate.now());
-            weeklyRows.add(new WeeklyRow(bucket.label(), waferCells, lotCells, orderCells, rowTotal, isPrior));
+            weeklyRows.add(new WeeklyRow(bucket.label(), cells, rowTotal, isPrior));
         }
 
-        return new WeeklyTotalsResponse(STAGES, weeklyRows, maxWaferValue, maxLotValue, maxOrderValue);
+        return new WeeklyTotalsResponse(STAGES, weeklyRows);
     }
 
     public List<Lot> getLotsForStageAndWeek(String stage, String weekLabel) {

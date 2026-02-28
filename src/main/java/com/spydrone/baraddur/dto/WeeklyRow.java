@@ -4,9 +4,7 @@ import java.util.List;
 
 public record WeeklyRow(
     String weekLabel,
-    List<Integer> waferCells,
-    List<Integer> lotCells,
-    List<Integer> orderCells,
+    List<WeeklyCell> cells,
     int rowTotal,
     boolean isPrior
 ) {}
