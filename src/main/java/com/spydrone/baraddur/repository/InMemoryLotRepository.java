@@ -89,6 +89,13 @@ public class InMemoryLotRepository implements LotRepository {
     }
 
     @Override
+    public List<Lot> getByOrderId(String orderId) {
+        return lots.values().stream()
+                .filter(lot -> orderId.equals(lot.getOrderId()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<Lot> findByStatus(String status) {
         return lots.values().stream()
                 .filter(lot -> status.equals(lot.getStatus()))

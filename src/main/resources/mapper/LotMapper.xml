@@ -26,6 +26,10 @@
         SELECT * FROM lots WHERE stage = #{stage}
     </select>
 
+    <select id="findByOrderId" resultMap="lotResultMap">
+        SELECT * FROM lots WHERE order_id = #{orderId}
+    </select>
+
     <select id="findByStatus" resultMap="lotResultMap">
         SELECT * FROM lots WHERE status = #{status}
     </select>

@@ -8,6 +8,7 @@ import java.util.Optional;
 public interface LotRepository {
     List<Lot> findAll();
     List<Lot> findByStage(String stage);
+    List<Lot> getByOrderId(String orderId);
     List<Lot> findByStatus(String status);
     Optional<Lot> findById(String id);
     void save(Lot lot);

@@ -108,18 +108,17 @@ public class WeeklyProjectionService {
 
         // Old cell: orderId is no longer here if no remaining lot in that (weekLabel, oldStage) shares it
         int oldOrderDelta = 0;
-        if (orderId != null) {
-            boolean orderStillInOldCell = lotRepository.findByStage(oldStage).stream()
-                    .filter(l -> orderId.equals(l.getOrderId()))
-                    .anyMatch(l -> inBucket(l.getTarget(), bucket, fmt));
-            if (!orderStillInOldCell) oldOrderDelta = -1;
-        }
-
-        // New cell: orderId is newly here if this is the only lot in (weekLabel, newStage) with it
         int newOrderDelta = 0;
         if (orderId != null) {
-            long countInNewCell = lotRepository.findByStage(lot.getStage()).stream()
-                    .filter(l -> orderId.equals(l.getOrderId()))
+            List<Lot> orderLots = lotRepository.getByOrderId(orderId);
+            boolean orderStillInOldCell = orderLots.stream()
+                    .filter(l -> oldStage.equals(l.getStage()))
+                    .anyMatch(l -> inBucket(l.getTarget(), bucket, fmt));
+            if (!orderStillInOldCell) oldOrderDelta = -1;
+
+            // New cell: orderId is newly here if this is the only lot in (weekLabel, newStage) with it
+            long countInNewCell = orderLots.stream()
+                    .filter(l -> lot.getStage().equals(l.getStage()))
                     .filter(l -> inBucket(l.getTarget(), bucket, fmt))
                     .count();
             if (countInNewCell == 1) newOrderDelta = 1;

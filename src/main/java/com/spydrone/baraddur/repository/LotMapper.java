@@ -9,6 +9,7 @@ import java.util.List;
 public interface LotMapper {
     List<Lot> findAll();
     List<Lot> findByStage(String stage);
+    List<Lot> findByOrderId(String orderId);
     List<Lot> findByStatus(String status);
     Lot findById(String id);
     void save(Lot lot);

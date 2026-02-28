@@ -26,6 +26,11 @@ public class MyBatisLotRepository implements LotRepository {
     }
 
     @Override
+    public List<Lot> getByOrderId(String orderId) {
+        return lotMapper.findByOrderId(orderId);
+    }
+
+    @Override
     public List<Lot> findByStatus(String status) {
         return lotMapper.findByStatus(status);
     }
