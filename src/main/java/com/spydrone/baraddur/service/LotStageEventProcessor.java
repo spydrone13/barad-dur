@@ -24,7 +24,7 @@ public class LotStageEventProcessor {
         this.weeklyProjectionService = weeklyProjectionService;
     }
 
-    @Scheduled(fixedDelay = 5000)
+    @Scheduled(fixedDelay = 5000, initialDelay = 15000)
     public void processEvents() {
         log.info("Processing events...");
         stageEventRepository.findUnprocessed().forEach(event ->

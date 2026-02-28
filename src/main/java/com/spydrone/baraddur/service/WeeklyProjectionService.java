@@ -89,9 +89,7 @@ public class WeeklyProjectionService {
         for (WeekBucket b : buckets) {
             for (String stage : STAGES) {
                 CellAccumulator acc = grid.get(b.label()).get(stage);
-                if (acc.lotCount > 0) {
-                    weeklyTotalsMapper.upsertCell(b.label(), stage, acc.waferCount, acc.lotCount, acc.orderIds.size());
-                }
+                weeklyTotalsMapper.upsertCell(b.label(), stage, acc.waferCount, acc.lotCount, acc.orderIds.size());
             }
         }
     }
