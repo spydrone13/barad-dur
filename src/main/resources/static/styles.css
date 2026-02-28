@@ -51,8 +51,9 @@
   --font-mono:    'Share Tech Mono', monospace;
 
   /* Layout */
-  --sidebar-w:    244px;
-  --header-h:     64px;
+  --sidebar-w:            244px;
+  --sidebar-w-collapsed:  52px;
+  --header-h:             64px;
   --radius:       3px;
   --radius-lg:    6px;
 
@@ -91,6 +92,7 @@ html, body {
   grid-template-rows: var(--header-h) 1fr;
   height: 100vh;
   overflow: hidden;
+  transition: grid-template-columns 0.25s ease;
 }
 
 /* ── Top Header ──────────────────────────────────────────── */
@@ -1563,3 +1565,104 @@ html, body {
 .wt-modal-table tbody tr:hover td { color: var(--steel-bright); background: var(--surface-3); }
 .wt-modal-table tbody td.wt-modal-lot-id { color: var(--fire-bright); font-weight: 600; }
 .wt-modal-table tbody td.wt-modal-wafers { color: var(--steel-bright); font-weight: 600; }
+
+/* ── Collapsible sidebar ─────────────────────────────────── */
+.nav-collapse-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 9px 14px;
+  background: none;
+  border: none;
+  border-top: 1px solid var(--border);
+  cursor: pointer;
+  color: var(--text-dim);
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-family: var(--font-ui);
+  font-weight: 600;
+  transition: color 0.2s, background 0.2s;
+}
+
+.nav-collapse-btn:hover {
+  color: var(--steel-mid);
+  background: rgba(255,255,255,0.02);
+}
+
+.nav-collapse-icon {
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
+}
+
+/* Collapsed state */
+.app-shell.nav-collapsed {
+  grid-template-columns: var(--sidebar-w-collapsed) 1fr;
+}
+
+.app-shell.nav-collapsed .sidebar {
+  overflow: visible;
+}
+
+.app-shell.nav-collapsed .nav-section {
+  padding: 12px 0 4px;
+}
+
+.app-shell.nav-collapsed .nav-label,
+.app-shell.nav-collapsed .nav-badge,
+.app-shell.nav-collapsed .nav-item-label {
+  display: none;
+}
+
+.app-shell.nav-collapsed .nav-item {
+  padding: 10px 0;
+  justify-content: center;
+  border-left-width: 2px;
+}
+
+.app-shell.nav-collapsed .nav-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.app-shell.nav-collapsed .sidebar-footer {
+  padding: 0;
+}
+
+.app-shell.nav-collapsed .ring-counter {
+  display: none;
+}
+
+.app-shell.nav-collapsed .nav-collapse-label {
+  display: none;
+}
+
+.app-shell.nav-collapsed .nav-collapse-btn {
+  border-top: none;
+  padding: 10px 0;
+}
+
+.app-shell.nav-collapsed .nav-collapse-icon {
+  transform: rotate(180deg);
+}
+
+/* Tooltips: hidden when expanded (label is visible), shown to the right when collapsed */
+.nav-item[data-tooltip]::after {
+  display: none;
+}
+
+.app-shell.nav-collapsed .nav-item[data-tooltip]::after {
+  display: block;
+  left: calc(100% + 10px);
+  right: auto;
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%);
+  opacity: 0;
+}
+
+.app-shell.nav-collapsed .nav-item[data-tooltip]:hover::after {
+  opacity: 1;
+}

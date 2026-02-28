@@ -78,40 +78,36 @@
       <div class="nav-section">
         <div class="nav-label">Production</div>
 
-        <a class="nav-item active" href="#" onclick="showSection('eye'); return false;">
-          <!-- Eye icon -->
+        <a class="nav-item active" href="#" onclick="showSection('eye'); return false;" data-tooltip="Lot Overview">
           <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
             <circle cx="12" cy="12" r="3"/>
           </svg>
-          Lot Overview
+          <span class="nav-item-label">Lot Overview</span>
           <span class="nav-badge">LIVE</span>
         </a>
 
-        <a class="nav-item" href="#" onclick="showSection('streams'); return false;">
-          <!-- Activity icon -->
+        <a class="nav-item" href="#" onclick="showSection('streams'); return false;" data-tooltip="WIP Tracking">
           <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
           </svg>
-          WIP Tracking
+          <span class="nav-item-label">WIP Tracking</span>
           <span class="nav-badge">247</span>
         </a>
 
-        <a class="nav-item" href="#" onclick="showSection('orders'); return false;">
-          <!-- Package icon -->
+        <a class="nav-item" href="#" onclick="showSection('orders'); return false;" data-tooltip="Orders">
           <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>
           </svg>
-          Orders
+          <span class="nav-item-label">Orders</span>
           <span class="nav-badge">4</span>
         </a>
 
-        <a class="nav-item" href="#" onclick="showSection('sources'); return false;">
-          <!-- Database icon -->
+        <a class="nav-item" href="#" onclick="showSection('sources'); return false;" data-tooltip="Equipment">
           <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
           </svg>
-          Equipment
+          <span class="nav-item-label">Equipment</span>
           <span class="nav-badge">9</span>
         </a>
       </div>
@@ -119,57 +115,51 @@
       <div class="nav-section">
         <div class="nav-label">Quality</div>
 
-        <a class="nav-item" href="#" onclick="showSection('query'); return false;">
-          <!-- Terminal icon -->
+        <a class="nav-item" href="#" onclick="showSection('query'); return false;" data-tooltip="SPC / Charts">
           <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/>
           </svg>
-          SPC / Charts
+          <span class="nav-item-label">SPC / Charts</span>
         </a>
 
-        <a class="nav-item" href="#" onclick="showSection('reports'); return false;">
-          <!-- FileText icon -->
+        <a class="nav-item" href="#" onclick="showSection('reports'); return false;" data-tooltip="Reports">
           <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
           </svg>
-          Reports
+          <span class="nav-item-label">Reports</span>
         </a>
 
-        <a class="nav-item" href="#" onclick="showSection('map'); return false;">
-          <!-- Map icon -->
+        <a class="nav-item" href="#" onclick="showSection('map'); return false;" data-tooltip="Floor Map">
           <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/>
           </svg>
-          Floor Map
+          <span class="nav-item-label">Floor Map</span>
         </a>
       </div>
 
       <div class="nav-section">
         <div class="nav-label">Operations</div>
 
-        <a class="nav-item" href="#" onclick="showSection('agents'); return false;">
-          <!-- Users icon -->
+        <a class="nav-item" href="#" onclick="showSection('agents'); return false;" data-tooltip="Operators">
           <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
           </svg>
-          Operators
+          <span class="nav-item-label">Operators</span>
         </a>
 
-        <a class="nav-item" href="#" onclick="showSection('alerts'); return false;">
-          <!-- Alert icon -->
+        <a class="nav-item" href="#" onclick="showSection('alerts'); return false;" data-tooltip="Alerts">
           <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
           </svg>
-          Alerts
+          <span class="nav-item-label">Alerts</span>
           <span class="nav-badge">3</span>
         </a>
 
-        <a class="nav-item" href="/weekly">
-          <!-- Grid/calendar icon -->
+        <a class="nav-item" href="/weekly" data-tooltip="Weekly Totals">
           <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="9" x2="9" y2="21"/><line x1="15" y1="9" x2="15" y2="21"/>
           </svg>
-          Weekly Totals
+          <span class="nav-item-label">Weekly Totals</span>
         </a>
       </div>
     </nav>
@@ -179,6 +169,12 @@
         <div class="ring-counter-label">Active Equipment</div>
         <div class="ring-dots" id="ringDots"></div>
       </div>
+      <button class="nav-collapse-btn" onclick="toggleNav()">
+        <svg class="nav-collapse-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+        <span class="nav-collapse-label">Collapse</span>
+      </button>
     </div>
   </aside>
 

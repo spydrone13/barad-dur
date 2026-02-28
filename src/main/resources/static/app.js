@@ -953,8 +953,18 @@ function renderOrderLots(orderId) {
   });
 }
 
+// ── Sidebar collapse ──────────────────────────────────────────
+function toggleNav() {
+  const shell = document.querySelector('.app-shell');
+  const collapsed = shell.classList.toggle('nav-collapsed');
+  localStorage.setItem('navCollapsed', collapsed ? '1' : '0');
+}
+
 // ── Boot ──────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+  if (localStorage.getItem('navCollapsed') === '1') {
+    document.querySelector('.app-shell').classList.add('nav-collapsed');
+  }
   initRingDots();
   initSparklines();
   initLotsTable();
