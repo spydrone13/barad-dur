@@ -158,6 +158,8 @@ public class WeeklyProjectionService {
         for (WeekBucket bucket : buckets) {
             List<WeeklyCell> cells = new ArrayList<>();
             int rowTotal = 0;
+            int rowLotTotal = 0;
+            int rowOrderTotal = 0;
             int threshold = WAFERS_PER_DAY * workDaysFromToday(today, bucket.end());
 
             for (String stage : STAGES) {
@@ -166,12 +168,14 @@ public class WeeklyProjectionService {
                 int l = cell != null ? cell.lotCount()   : 0;
                 int o = cell != null ? cell.orderCount() : 0;
                 rowTotal += w;
+                rowLotTotal += l;
+                rowOrderTotal += o;
                 int cumW = stageWaferCumulative.merge(stage, w, Integer::sum);
-                cells.add(new WeeklyCell(w, l, o, threshold, cumW));
+                cells.add(new WeeklyCell(stage, w, l, o, threshold, cumW));
             }
 
             boolean isPrior = !bucket.end().isAfter(today);
-            weeklyRows.add(new WeeklyRow(bucket.label(), cells, rowTotal, isPrior));
+            weeklyRows.add(new WeeklyRow(bucket.label(), cells, rowTotal, rowLotTotal, rowOrderTotal, isPrior));
         }
 
         return new WeeklyTotalsResponse(STAGES, weeklyRows);

@@ -753,7 +753,7 @@ function renderWeeklyTable(data) {
   html += '<tr>';
   html += '<th class="wt-week-col" rowspan="2">Week</th>';
   data.stages.forEach(s => { html += `<th colspan="3" class="wt-group-start">${stageDisplayName(s)}</th>`; });
-  html += '<th class="wt-total-col" rowspan="2">Total</th>';
+  html += '<th colspan="3" class="wt-group-start wt-total-col">Total</th>';
   html += '</tr>';
 
   // Header row 2 — W / L / O per stage
@@ -763,6 +763,9 @@ function renderWeeklyTable(data) {
     html += '<th class="wt-sub">L</th>';
     html += '<th class="wt-sub">O</th>';
   });
+  html += '<th class="wt-sub wt-group-start">W</th>';
+  html += '<th class="wt-sub">L</th>';
+  html += '<th class="wt-sub">O</th>';
   html += '</tr>';
 
   html += '</thead><tbody>';
@@ -805,8 +808,9 @@ function renderWeeklyTable(data) {
       }
     });
 
-    const totalDisplay = row.rowTotal > 0 ? row.rowTotal : '—';
-    html += `<td class="wt-cell wt-total">${totalDisplay}</td></tr>`;
+    html += row.rowTotal    > 0 ? `<td class="wt-cell wt-sub wt-group-start wt-total">${row.rowTotal}</td>`    : '<td class="wt-cell wt-sub wt-group-start wt-empty">—</td>';
+    html += row.rowLotTotal > 0 ? `<td class="wt-cell wt-sub wt-total">${row.rowLotTotal}</td>`               : '<td class="wt-cell wt-sub wt-empty">—</td>';
+    html += row.rowOrderTotal > 0 ? `<td class="wt-cell wt-sub wt-total">${row.rowOrderTotal}</td></tr>`      : '<td class="wt-cell wt-sub wt-empty">—</td></tr>';
   });
 
   html += '</tbody></table>';

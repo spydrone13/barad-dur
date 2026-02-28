@@ -6,5 +6,7 @@ public record WeeklyRow(
     String weekLabel,
     List<WeeklyCell> cells,
     int rowTotal,
+    int rowLotTotal,
+    int rowOrderTotal,
     boolean isPrior
 ) {}
