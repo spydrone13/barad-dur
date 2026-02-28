@@ -960,5 +960,9 @@ document.addEventListener('DOMContentLoaded', () => {
   initRingDots();
   initSparklines();
   initLotsTable();
-  initLotOverview();
+  if (window.location.pathname === '/weekly') {
+    showSection('weekly');
+  } else {
+    initLotOverview();
+  }
 });
