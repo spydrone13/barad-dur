@@ -21,7 +21,7 @@ INSERT INTO lots VALUES ('BD-26-0880', 'BD-5 SRAM',           50, 'CVD',        
 INSERT INTO lots VALUES ('BD-26-0876', 'BD-9 RF',             25, 'METAL',       'high',   'on-track', 'A. Elessar',    'Feb 26', 'ORD-26-003');
 INSERT INTO lots VALUES ('BD-26-0871', 'BD-9 RF',             25, 'PASSIVATION', 'high',   'on-track', 'A. Elessar',    'Feb 25', 'ORD-26-003');
 INSERT INTO lots VALUES ('BD-26-0865', 'BD-7 Logic',          25, 'PROBE',       'normal', 'on-track', 'B. Baggins',    'Feb 24', 'ORD-26-001');
-INSERT INTO lots VALUES ('BD-26-0860', 'BD-3 Power',          75, 'IMPLANT',     'low',    'hold',     'T. Took',       'Mar 10', 'ORD-26-004');
+INSERT INTO lots VALUES ('BD-26-0860', 'BD-3 Power',          150, 'IMPLANT',     'low',    'hold',     'T. Took',       'Mar 10', 'ORD-26-004');
 INSERT INTO lots VALUES ('BD-26-0855', 'BD-3 Power',          75, 'WAFER START', 'normal', 'on-track', 'M. Brandybuck', 'Mar 18', 'ORD-26-004');
 INSERT INTO lots VALUES ('BD-26-0849', 'BD-5 SRAM',           50, 'DIFFUSION',   'normal', 'on-track', 'F. Baggins',    'Mar 6',  'ORD-26-002');
 INSERT INTO lots VALUES ('BD-26-0844', 'BD-7 Logic',          25, 'CMP',         'high',   'delayed',  'G. Stormcrow',  'Feb 27', 'ORD-26-001');
@@ -36,10 +36,10 @@ INSERT INTO lots VALUES ('BD-26-0804', 'BD-7 Logic',          25, 'METAL',      
 INSERT INTO lots VALUES ('BD-26-0799', 'BD-9 RF',             25, 'PROBE',       'high',   'delayed',  'G. Stormcrow',  'Feb 24', 'ORD-26-003');
 INSERT INTO lots VALUES ('BD-26-0794', 'BD-3 Power',          75, 'IMPLANT',     'normal', 'hold',     'T. Took',       'Mar 8',  'ORD-26-004');
 INSERT INTO lots VALUES ('BD-26-0893', 'BD-12 Mixed-Signal', 100, 'OXIDATION',   'normal', 'on-track', 'G. Grey',       'Mar 9',  'ORD-26-005');
-INSERT INTO lots VALUES ('BD-26-0897', 'BD-3 Power',          75, 'WAFER START', 'low',    'hold',     'N. Shadow',     'Mar 11', 'ORD-26-004');
+INSERT INTO lots VALUES ('BD-26-0897', 'BD-3 Power',          125, 'WAFER START', 'low',    'hold',     'N. Shadow',     'Mar 11', 'ORD-26-004');
 INSERT INTO lots VALUES ('BD-26-0902', 'BD-14 Analog',        50, 'OXIDATION',   'normal', 'on-track', 'O. Fangorn',    'Mar 14', 'ORD-26-006');
 INSERT INTO lots VALUES ('BD-26-0908', 'BD-9 RF',             25, 'WAFER START', 'low',    'on-track', 'E. Arwen',      'Mar 16', 'ORD-26-003');
-INSERT INTO lots VALUES ('BD-26-0913', 'BD-12 Mixed-Signal', 100, 'OXIDATION',   'normal', 'on-track', 'G. Grey',       'Mar 19', 'ORD-26-005');
+INSERT INTO lots VALUES ('BD-26-0913', 'BD-12 Mixed-Signal', 150, 'OXIDATION',   'normal', 'on-track', 'G. Grey',       'Mar 19', 'ORD-26-005');
 INSERT INTO lots VALUES ('BD-26-0918', 'BD-7 Logic',          25, 'WAFER START', 'low',    'on-track', 'M. Brandybuck', 'Mar 21', 'ORD-26-001');
 INSERT INTO lots VALUES ('BD-26-0924', 'BD-5 SRAM',           50, 'WAFER START', 'low',    'on-track', 'N. Shadow',     'Mar 24', 'ORD-26-002');
 INSERT INTO lots VALUES ('BD-26-0930', 'BD-14 Analog',       100, 'WAFER START', 'low',    'on-track', 'O. Fangorn',    'Mar 26', 'ORD-26-006');

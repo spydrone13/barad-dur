@@ -152,12 +152,13 @@ public class WeeklyProjectionService {
         }
 
         List<WeeklyRow> weeklyRows = new ArrayList<>();
+        Map<String, Integer> stageWaferCumulative = new HashMap<>();
 
         LocalDate today = LocalDate.now();
         for (WeekBucket bucket : buckets) {
             List<WeeklyCell> cells = new ArrayList<>();
             int rowTotal = 0;
-            int threshold = WAFERS_PER_DAY * remainingWorkDays(today, bucket.start(), bucket.end());
+            int threshold = WAFERS_PER_DAY * workDaysFromToday(today, bucket.end());
 
             for (String stage : STAGES) {
                 WeeklyTotalRow cell = index.get(bucket.label() + "|" + stage);
@@ -165,7 +166,8 @@ public class WeeklyProjectionService {
                 int l = cell != null ? cell.lotCount()   : 0;
                 int o = cell != null ? cell.orderCount() : 0;
                 rowTotal += w;
-                cells.add(new WeeklyCell(w, l, o, threshold));
+                int cumW = stageWaferCumulative.merge(stage, w, Integer::sum);
+                cells.add(new WeeklyCell(w, l, o, threshold, cumW));
             }
 
             boolean isPrior = !bucket.end().isAfter(today);
@@ -175,10 +177,9 @@ public class WeeklyProjectionService {
         return new WeeklyTotalsResponse(STAGES, weeklyRows);
     }
 
-    private static int remainingWorkDays(LocalDate today, LocalDate bucketStart, LocalDate bucketEnd) {
-        LocalDate from = today.isAfter(bucketStart) ? today : bucketStart;
+    private static int workDaysFromToday(LocalDate today, LocalDate bucketEnd) {
         int count = 0;
-        for (LocalDate d = from; d.isBefore(bucketEnd); d = d.plusDays(1)) {
+        for (LocalDate d = today; d.isBefore(bucketEnd); d = d.plusDays(1)) {
             DayOfWeek dow = d.getDayOfWeek();
             if (dow != DayOfWeek.SATURDAY && dow != DayOfWeek.SUNDAY) {
                 count++;

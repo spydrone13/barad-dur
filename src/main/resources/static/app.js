@@ -772,7 +772,7 @@ function renderWeeklyTable(data) {
     html += `<td class="wt-week-label">${row.weekLabel}</td>`;
 
     row.cells.forEach((cell, i) => {
-      const { waferCount: w, lotCount: l, orderCount: o, threshold } = cell;
+      const { waferCount: w, lotCount: l, orderCount: o, threshold, cumulativeWaferCount } = cell;
       const allZero = w === 0 && l === 0 && o === 0;
 
       if (allZero) {
@@ -786,7 +786,7 @@ function renderWeeklyTable(data) {
         let bg, fg;
         if (row.isPrior) {
           bg = 'rgba(204,34,0,0.22)';   fg = '#ff4444';
-        } else if (w > threshold) {
+        } else if (cumulativeWaferCount > threshold) {
           bg = 'rgba(204,170,0,0.22)';   fg = '#ffcc00';
         } else {
           bg = 'rgba(34,204,102,0.18)';  fg = '#22cc66';
